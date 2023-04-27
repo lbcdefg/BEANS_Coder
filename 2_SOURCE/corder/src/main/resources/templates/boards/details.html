@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- 서머노트를 위해 추가해야할 부분 -->
+<head>
+    <th:block th:replace="fragment/config :: metaConfig">
+    </th:block>
+    <th:block th:replace="fragment/commonjs :: commonJs">
+    </th:block>
+    <title>Corder 게시글</title>
+
+    <script type="text/javascript" language="javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+        $(function(){
+			$("#plusVoteBt").on("click", function(){
+                $.ajax({
+                    type : "GET",
+                    url : "plusVoteCount",
+                    data: {bid: $('#bid').val(), mid: $('#mid').val()},
+                    success : function(data){
+                        if (data) {
+                            console.log("data :" + data);
+                            $("#contents_vote").text(data);
+                        } else if (data ==0){
+                            console.log("data :" + data);
+                            $("#contents_vote").text(data);
+                        }
+                    }
+                });
+			});
+			$("#minusVoteBt").on("click", function(){
+                $.ajax({
+                    type : "GET",
+                    url : "minusVoteCount",
+                    data: {bid: $('#bid').val(), mid: $('#mid').val()},
+                    success : function(data){
+                        if (data) {
+                            console.log("data :" + data);
+                            $("#contents_vote").text(data);
+                        } else if (data ==0){
+                            console.log("data :" + data);
+                            $("#contents_vote").text(data);
+                        }
+                    }
+                });
+			});
+		});
+
+
+    </script>
+</head>
+
+<body class="flex h-full select-auto flex-col font-sans text-gray-900 antialiased dark:bg-gray-800 dark:text-gray-100">
+    <th:block th:replace="fragment/header :: commonHeader">
+    </th:block>
+    <main class="mx-auto mt-2 w-full max-w-7xl px-4 lg:mt-[18px] lg:px-0">
+        <div class="flex lg:space-x-10 ">
+            <!--좌측 배너 공간-->
+            <div class="hidden w-[180px] shrink-0 lg:block ">
+                <div class="flex items-center justify-center rounded-md">
+                    <div class="flex items-center justify-center rounded-md">
+                        <a class="flex flex-col items-center" href="/supports/together">
+                            <img src="/imgs/zibpalm.png" class="" alt="">
+                        </a>
+                    </div>
+                    <!--광고?-->
+                </div>
+                <div class="mt-10 mb-8">
+                    <div class="hidden lg:flex">
+                        <div class="flex items-center justify-center rounded-md">
+                            <a class="flex flex-col items-center" href="/supports/together">
+                                <img src="/imgs/skream.png">
+                            </a>
+                        </div>
+                        <!--광고?-->
+                    </div>
+                </div>
+                <div class="my-8">
+                    <div>
+                        <div class="flex items-center justify-center rounded-md">
+                            <a class="flex flex-col items-center" href="/supports/together">
+                                <img src="/imgs/bom.png">
+                            </a>
+                        </div>
+                        <!--광고?-->
+                    </div>
+                </div>
+            </div>
+            <!--좌측 배너 공간 끝-->
+            <div class="w-full min-w-0 flex-auto lg:static lg:max-h-full lg:overflow-visible">
+                <div class="min-w-0 flex-auto">
+                    <!--중앙 상단 배너 자리-->
+                    <div class="my-8  hidden items-center lg:flex">
+                        <div class="hidden items-center lg:flex">
+                            <img class="h-[140px] w-full" src="/imgs/centerBanner.png">
+                        </div>
+                    </div>
+                    <!--중앙 상단 배너 자리-->
+                    <div>
+                        <div class="relative my-7">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-500/30 dark:border-gray-500/70">
+
+                                </div>
+                            </div>
+                            <div class="relative ml-2 flex text-sm font-normal sm:ml-5">
+                                <div class="bg-white px-2 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                                    <a class="text-gray-400 hover:text-blue-500 dark:hover:text-blue-200" th:href="@{'/' + ${cmain}}">
+                                        [[${contents.cmainKor}]]
+                                    </a> /
+                                    <a class="text-blue-500 hover:text-blue-300 dark:hover:text-blue-200" th:href="@{'/' + ${cmain} + '/'+ ${ccode}}">
+                                        [[${contents.ccodeKor}]]
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 게시글 시작 --->
+                        <div class="mt-8 mb-14 w-full sm:mt-9">
+                            <div class="mb-8 flex flex-wrap sm:mb-9">
+                                <div class="flex items-center justify-center">
+                                    <a th:href="@{'users/' + ${contents.mid}}">
+                                        <th:block th:if="${contents.fname}!=null">
+                                            <th:block th:with="extension=${#strings.substring(contents.fname, #strings.indexOf(contents.fname, '.'), contents.fname.length)}">
+                                                <th:block th:if="${#strings.contains('.jpg|.png|.jpeg|.ico|.gif', extension)}">
+                                                    <div class="items">
+                                                        <img class="inline-block h-10 w-10 rounded-full" th:src="|/myinfo/images/${contents.fname}|" width="150" height="150" alt="프로필 사진">
+                                                    </div>
+                                                </th:block>
+                                            </th:block>
+                                        </th:block>
+                                        <th:block th:if="${contents.fname}==null">
+                                            <img class="inline-block h-10 w-10 rounded-full" src="//www.gravatar.com/avatar/1b4378984e52feb7361b0ebf572cb67a?d=identicon&amp;s=96" alt="프로필 사진">
+                                        </th:block>
+                                    </a>
+                                    <div class="ml-2 flex flex-1 flex-col text-base font-normal">
+                                        <a class="pl-0.5 text-gray-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200" th:href="@{'/users/'+${contents.mid}}">[[${contents.writer}]]</a>
+                                        <div class="flex items-center gap-x-1 text-sm font-normal text-gray-700 dark:text-gray-300">
+                                            <span>
+                                                <svg class="inline h-3 w-3" width="9" height="12" viewBox="0 1 9 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <title>bolt icon</title>
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.21535 0.575533C5.4443 0.647704 5.6 0.86003 5.6 1.10009V3.85009L7.8 3.85009C8.00508 3.85009 8.19313 3.96419 8.28783 4.14609C8.38254 4.328 8.36818 4.54748 8.25057 4.71549L4.40057 10.2155C4.26291 10.4122 4.0136 10.4968 3.78464 10.4246C3.55569 10.3525 3.4 10.1401 3.4 9.90009L3.4 7.15009H1.2C0.994914 7.15009 0.806866 7.03599 0.712157 6.85408C0.617448 6.67218 0.631811 6.45269 0.749418 6.28468L4.59942 0.784684C4.73708 0.588021 4.98639 0.503362 5.21535 0.575533Z" fill="currentColor"></path>
+                                                </svg>9.1k
+                                            </span>
+                                            <span>·</span>
+                                            <span th:text="${#temporals.format(contents.udate, 'MM.dd HH:mm')}"></span>
+                                            <span>·</span>
+                                            <div class="flex items-center gap-x-0.5">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4 shrink-0">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                </svg>[[${contents.lookup}]]
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ml-auto flex items-center gap-x-4 text-sm text-gray-700 dark:text-gray-300 sm:gap-x-5">
+                                    <div>
+                                        <span class="sr-only">공유</span>
+                                        <div class="relative" data-headlessui-state="">
+                                            <div class="flex items-center">
+                                                <button id="headlessui-menu-button-:r8:" type="button" aria-haspopup="true" aria-expanded="false" data-headlessui-state="">
+                                                    <span class="sr-only">공유하기</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-6 text-gray-400 hover:text-blue-500 focus:outline-0 focus:ring-0 dark:hover:text-blue-200">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button>
+                                        <span class="sr-only">스크랩</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-6 text-gray-400 hover:fill-current hover:text-blue-500 focus:outline-0 focus:ring-0 dark:hover:text-blue-200">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div th:each="imageFile : ${fileups} ">
+                                <th:block th:with="fileType=${#strings.substring(imageFile.orgnm, #strings.indexOf(imageFile.orgnm, '.'), imageFile.orgnm.length)}">
+                                    <th:block th:if="${fileType} == .png or ${fileType} == .jpg or ${fileType} == .gif">
+                                        <img th:src="|/file_th/images/${imageFile.id}|" width="150" height="150">
+                                        <p th:text="${imageFile.orgnm}"></p>
+                                    </th:block>
+                                </th:block>
+                            </div>
+                            <h1 class="block break-all text-xl font-semibold leading-7 sm:text-3xl sm:leading-10">[[${contents.title}]]</h1>
+                            <div class="my-6 text-sm text-gray-700 dark:text-gray-300 sm:my-8 sm:text-base">
+                                <div class="remirror-theme">
+                                    <div class="remirror-editor-wrapper">
+                                        <div contenteditable="false" translate="no" role="textbox" aria-multiline="true" aria-readonly="true" aria-label="" aria-placeholder="내용을 입력해주세요." class="ProseMirror remirror-editor remirror-a11y-dark">
+                                            <span th:utext="${contents.content}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div th:if="${!fileup.isEmpty()}">
+                                    <div class="fileList-wrapper">
+                                        <select onchange="window.open(value,'_blank');">
+                                            <option value="" selected>다운로드 파일 선택</option>
+                                            <th:block th:each="file : ${fileup}">
+                                                <option th:value="@{'attach/' + ${file.fid}}">
+                                                    <a style="color:black" th:href="@{'/articles/attach/' + ${file.fid}}" th:text="${file.ofname}">
+                                                    </a>
+                                                </option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div sec:authorize="isAnonymous()" class="flex items-center space-x-1">
+                                <div class="flex flex-1 flex-wrap items-center"></div>
+                                <div class="inline-flex">
+                                    <span class="border border-gray-500/30 bg-white text-gray-700" style="color:gray;">게시물 추천은 로그인 후 가능합니다.</span>
+                                </div>
+                            </div>
+
+                            <div sec:authorize="isAuthenticated()" class="flex items-center space-x-1">
+                                <div class="flex flex-1 flex-wrap items-center"></div>
+                                <div class="inline-flex">
+                                    <button id="minusVoteBt" type="button" class="group relative flex h-[38px] w-[35px] items-center justify-center rounded-l-md border border-gray-500/30 bg-white text-gray-700 hover:border-gray-500/70 focus:z-10 focus:outline-none focus:ring-0 dark:border-gray-500/70 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-gray-500/30">
+                                        <span class="sr-only">비추천</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="hover:text-red-500 group-hover:text-red-500 h-4 w-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+                                        </svg>
+                                    </button>
+                                    <span class="flex h-[38px] w-[55px] items-center justify-center border border-x-0 border-gray-500/30 bg-white text-base font-medium text-gray-700 dark:border-gray-500/70 dark:bg-gray-700 dark:text-gray-300" id="contents_vote">
+                                        [[${contents.vote}]]</span>
+
+                                    <button id="plusVoteBt" type="button" class="group relative flex h-[38px] w-[35px] items-center justify-center rounded-r-md border border-gray-500/30 bg-white text-gray-700 hover:border-gray-500/70 focus:z-10 focus:outline-none focus:ring-0 dark:border-gray-500/70 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-gray-500/30">
+                                        <span class="sr-only">추천</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="hover:text-blue-500 group-hover:text-blue-500 h-4 w-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"></path>
+                                        </svg>
+                                    </button>
+
+                                    <input type="hidden" id="vote" name="vote" value="1">
+                                    <input type="hidden" id="bid"  name="bid" th:value="${contents.bid}">
+                                    <input type="hidden" id="mid" name="mid" th:value="${loginOk} ? ${loginOk.mid}">
+                                </div>
+                            </div>
+                            <th:block th:if="${loginOk}">
+                                <th:block th:if="${loginOk.nick==contents.writer}">
+                                    <div class="mt-3 flex items-center justify-end gap-x-4">
+                                        <button type="button" class="inline-flex items-center space-x-2 rounded-md bg-blue-500 px-8 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 disabled:bg-blue-500 disabled:opacity-40"
+                                                th:onclick="|location.href='@{|/${contents.cmain}/update/${contents.bid}|}'|">
+                                            수정 하기
+                                        </button>
+                                        <button type="button" id="articleDelBt" class="inline-flex items-center space-x-2 rounded-md px-8 py-2 text-sm font-semibold leading-6 text-white shadow-sm"
+                                                th:onclick="|location.href='@{|/articles/${contents.bid}/del.do|}'|">
+                                            삭제 하기
+                                        </button>
+                                    </div>
+                                </th:block>
+                            </th:block>
+                        </div>
+                        <div class="space-y-2 lg:hidden">
+                            <div class="hidden items-center lg:flex">
+                                <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 180px; height: 0px;" data-adsbygoogle-status="done" data-ad-status="unfilled">
+                                    <div id="aswift_6_host" tabindex="0" title="Advertisement" aria-label="Advertisement" style="border: none; height: 0px; width: 180px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block; overflow: hidden; opacity: 0;">
+                                        <iframe id="aswift_6" name="aswift_6" style="left:0;position:absolute;top:0;border:0;width:180px;height:380px;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" width="180" height="380" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-8103607814406874&amp;output=html&amp;h=380&amp;slotname=6573675943&amp;adk=1928128277&amp;adf=3185206662&amp;pi=t.ma~as.6573675943&amp;w=180&amp;lmt=1679797898&amp;format=180x380&amp;url=https%3A%2F%2Fokky.kr%2Farticles%2F1418898&amp;adtest=off&amp;wgl=1&amp;uach=WyJXaW5kb3dzIiwiMTAuMC4wIiwieDg2IiwiIiwiMTExLjAuMTY2MS41MSIsW10sZmFsc2UsbnVsbCwiNjQiLFtbIk1pY3Jvc29mdCBFZGdlIiwiMTExLjAuMTY2MS41MSJdLFsiTm90KEE6QnJhbmQiLCI4LjAuMC4wIl0sWyJDaHJvbWl1bSIsIjExMS4wLjU1NjMuNjQiXV0sZmFsc2Vd&amp;dt=1679797898950&amp;bpp=1&amp;bdt=1765&amp;idt=-M&amp;shv=r20230322&amp;mjsv=m202303210101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3D75dae249ca2bb97a-22ef11f1f4db0053%3AT%3D1678610866%3ART%3D1678610866%3AS%3DALNI_MaN7ZEDHwANQqjaJHOOf4oybzwidw&amp;gpic=UID%3D00000bd7bb173349%3AT%3D1678610866%3ART%3D1679797896%3AS%3DALNI_Ma1PhXgEMlbhEFAfgRCIQJa8qCKEA&amp;prev_fmts=0x0%2C180x180%2C180x380%2C840x140%2C180x380%2C840x140%2C180x180%2C840x140%2C640x200%2C840x140%2C640x200&amp;nras=1&amp;correlator=6513316120170&amp;frm=20&amp;pv=1&amp;ga_vid=1451762852.1678610868&amp;ga_sid=1679797898&amp;ga_hid=1749605058&amp;ga_fc=1&amp;u_tz=540&amp;u_his=3&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1080&amp;u_aw=1920&amp;u_cd=24&amp;u_sd=1&amp;dmc=8&amp;adx=-12245933&amp;ady=-12245933&amp;biw=884&amp;bih=999&amp;scr_x=0&amp;scr_y=0&amp;eid=44773809%2C44759842%2C44759927%2C44759876%2C44777877%2C31071756%2C31073105%2C31073107%2C44786918&amp;oid=2&amp;psts=AHQMDFd8loHreGXvaOX2_TWhpoWWXu-h5XESpafrsLFIFcjyoY_nTbkJVANSxuVXCdBYiPqvHUKq0eKbRFPHwTHpidSz7o0&amp;pvsid=4494132717969952&amp;tmod=507209858&amp;wsm=1&amp;uas=3&amp;nvt=1&amp;fc=1920&amp;brdim=-7%2C0%2C-7%2C0%2C1920%2C0%2C974%2C1087%2C901%2C999&amp;vis=1&amp;rsz=%7C%7CenEr%7C&amp;abl=CS&amp;pfx=0&amp;fu=32768&amp;bc=31&amp;ifi=17&amp;uci=a!h&amp;fsb=1&amp;xpc=7oJvB1T56Y&amp;p=https%3A//okky.kr&amp;dtd=15" data-google-container-id="a!h" data-google-query-id="CJbJlOjG-P0CFQRUKgod0LkMMw" data-load-complete="true">
+
+                                        </iframe>
+                                    </div>
+                                </ins>
+                            </div>
+                            <div class="flex items-center lg:hidden">
+                                <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 840px; height: 140px;" data-adsbygoogle-status="done" data-ad-status="filled">
+                                    <div id="aswift_7_host" tabindex="0" title="Advertisement" aria-label="Advertisement" style="border: none; height: 140px; width: 840px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;">
+                                        <iframe id="aswift_7" name="aswift_7" style="left:0;position:absolute;top:0;border:0;width:840px;height:140px;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" width="840" height="140" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-8103607814406874&amp;output=html&amp;h=140&amp;slotname=6573675943&amp;adk=2212207247&amp;adf=2201581512&amp;pi=t.ma~as.6573675943&amp;w=840&amp;lmt=1679797898&amp;format=840x140&amp;url=https%3A%2F%2Fokky.kr%2Farticles%2F1418898&amp;adtest=off&amp;wgl=1&amp;uach=WyJXaW5kb3dzIiwiMTAuMC4wIiwieDg2IiwiIiwiMTExLjAuMTY2MS41MSIsW10sZmFsc2UsbnVsbCwiNjQiLFtbIk1pY3Jvc29mdCBFZGdlIiwiMTExLjAuMTY2MS41MSJdLFsiTm90KEE6QnJhbmQiLCI4LjAuMC4wIl0sWyJDaHJvbWl1bSIsIjExMS4wLjU1NjMuNjQiXV0sZmFsc2Vd&amp;dt=1679797898950&amp;bpp=1&amp;bdt=1765&amp;idt=-M&amp;shv=r20230322&amp;mjsv=m202303210101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3D75dae249ca2bb97a-22ef11f1f4db0053%3AT%3D1678610866%3ART%3D1678610866%3AS%3DALNI_MaN7ZEDHwANQqjaJHOOf4oybzwidw&amp;gpic=UID%3D00000bd7bb173349%3AT%3D1678610866%3ART%3D1679797896%3AS%3DALNI_Ma1PhXgEMlbhEFAfgRCIQJa8qCKEA&amp;prev_fmts=0x0%2C180x180%2C180x380%2C840x140%2C180x380%2C840x140%2C180x180%2C840x140%2C640x200%2C840x140%2C640x200%2C180x380&amp;nras=1&amp;correlator=6513316120170&amp;frm=20&amp;pv=1&amp;ga_vid=1451762852.1678610868&amp;ga_sid=1679797898&amp;ga_hid=1749605058&amp;ga_fc=1&amp;u_tz=540&amp;u_his=3&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1080&amp;u_aw=1920&amp;u_cd=24&amp;u_sd=1&amp;dmc=8&amp;adx=16&amp;ady=802&amp;biw=884&amp;bih=999&amp;scr_x=0&amp;scr_y=0&amp;eid=44773809%2C44759842%2C44759927%2C44759876%2C44777877%2C31071756%2C31073105%2C31073107%2C44786918&amp;oid=2&amp;psts=AHQMDFd8loHreGXvaOX2_TWhpoWWXu-h5XESpafrsLFIFcjyoY_nTbkJVANSxuVXCdBYiPqvHUKq0eKbRFPHwTHpidSz7o0&amp;pvsid=4494132717969952&amp;tmod=507209858&amp;wsm=1&amp;uas=3&amp;nvt=1&amp;fc=1920&amp;brdim=-7%2C0%2C-7%2C0%2C1920%2C0%2C974%2C1087%2C901%2C999&amp;vis=1&amp;rsz=%7C%7CeE%7C&amp;abl=CS&amp;pfx=0&amp;fu=0&amp;bc=31&amp;ifi=18&amp;uci=a!i&amp;fsb=1&amp;xpc=TSbKROWFN4&amp;p=https%3A//okky.kr&amp;dtd=17" data-google-container-id="a!i" data-google-query-id="CIO7lOjG-P0CFVUpKgodMloHnw" data-load-complete="true">
+
+                                        </iframe>
+                                    </div>
+                                </ins>
+                            </div>
+                        </div>
+                        <div class="hidden lg:flex">
+                            <div class="hidden lg:flex">
+                                <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: block; margin: auto; width: 840px; height: 0px;" data-adsbygoogle-status="done" data-ad-status="unfilled">
+                                    <div id="aswift_8_host" tabindex="0" title="Advertisement" aria-label="Advertisement" style="border: none; height: 0px; width: 840px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block; overflow: hidden; opacity: 0;">
+                                        <iframe id="aswift_8" name="aswift_8" style="left:0;position:absolute;top:0;border:0;width:840px;height:140px;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" width="840" height="140" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="https://googleads.g.doubleclick.net/pagead/ads?client=ca-pub-8103607814406874&amp;output=html&amp;h=140&amp;slotname=6573675943&amp;adk=2212207247&amp;adf=892999229&amp;pi=t.ma~as.6573675943&amp;w=840&amp;lmt=1679797898&amp;format=840x140&amp;url=https%3A%2F%2Fokky.kr%2Farticles%2F1418898&amp;adtest=off&amp;wgl=1&amp;uach=WyJXaW5kb3dzIiwiMTAuMC4wIiwieDg2IiwiIiwiMTExLjAuMTY2MS41MSIsW10sZmFsc2UsbnVsbCwiNjQiLFtbIk1pY3Jvc29mdCBFZGdlIiwiMTExLjAuMTY2MS41MSJdLFsiTm90KEE6QnJhbmQiLCI4LjAuMC4wIl0sWyJDaHJvbWl1bSIsIjExMS4wLjU1NjMuNjQiXV0sZmFsc2Vd&amp;dt=1679797898950&amp;bpp=1&amp;bdt=1764&amp;idt=-M&amp;shv=r20230322&amp;mjsv=m202303210101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;cookie=ID%3D75dae249ca2bb97a-22ef11f1f4db0053%3AT%3D1678610866%3ART%3D1678610866%3AS%3DALNI_MaN7ZEDHwANQqjaJHOOf4oybzwidw&amp;gpic=UID%3D00000bd7bb173349%3AT%3D1678610866%3ART%3D1679797896%3AS%3DALNI_Ma1PhXgEMlbhEFAfgRCIQJa8qCKEA&amp;prev_fmts=0x0%2C180x180%2C180x380%2C840x140%2C180x380%2C840x140%2C180x180%2C840x140%2C640x200%2C840x140%2C640x200%2C180x380%2C840x140&amp;nras=1&amp;correlator=6513316120170&amp;frm=20&amp;pv=1&amp;ga_vid=1451762852.1678610868&amp;ga_sid=1679797898&amp;ga_hid=1749605058&amp;ga_fc=1&amp;u_tz=540&amp;u_his=3&amp;u_h=1080&amp;u_w=1920&amp;u_ah=1080&amp;u_aw=1920&amp;u_cd=24&amp;u_sd=1&amp;dmc=8&amp;adx=-12245933&amp;ady=-12245933&amp;biw=884&amp;bih=999&amp;scr_x=0&amp;scr_y=0&amp;eid=44773809%2C44759842%2C44759927%2C44759876%2C44777877%2C31071756%2C31073105%2C31073107%2C44786918&amp;oid=2&amp;psts=AHQMDFd8loHreGXvaOX2_TWhpoWWXu-h5XESpafrsLFIFcjyoY_nTbkJVANSxuVXCdBYiPqvHUKq0eKbRFPHwTHpidSz7o0&amp;pvsid=4494132717969952&amp;tmod=507209858&amp;wsm=1&amp;uas=3&amp;nvt=1&amp;fc=1920&amp;brdim=-7%2C0%2C-7%2C0%2C1920%2C0%2C974%2C1087%2C901%2C999&amp;vis=1&amp;rsz=%7C%7CenEr%7C&amp;abl=CS&amp;pfx=0&amp;fu=32768&amp;bc=31&amp;ifi=19&amp;uci=a!j&amp;fsb=1&amp;xpc=0A73507H1q&amp;p=https%3A//okky.kr&amp;dtd=19" data-google-container-id="a!j" data-google-query-id="CMDJlOjG-P0CFZolYAodKDEHzg" data-load-complete="true">
+
+                                        </iframe>
+                                    </div>
+                                </ins>
+                            </div>
+                        </div>
+                        <!-- 댓글 시작 --->
+                        <div class="mt-8">
+                            <section aria-labelledby="notes-title">
+                                <div class="my-5 border-t border-gray-500/30 dark:border-gray-500/70">
+
+                                </div>
+                                <div class="mb-6 sm:mb-8">
+                                    <th:block th:if="${contents.commentCount}!=0">
+                                    <h2 id="notes-title">[[${contents.commentCount}]] 개의 댓글이 있습니다.</h2>
+                                    </th:block>
+                                </div>
+                                <div class="my-4 rounded-lg border border-gray-500/30 p-4 dark:border-gray-500/70 sm:my-10 sm:p-6">
+                                    <div class="flex space-x-2 sm:space-x-4">
+                                        <div class="shrink-0">
+                                            <th:block th:if="${contents.fname}!=null">
+                                                <th:block th:with="extension=${#strings.substring(contents.fname, #strings.indexOf(contents.fname, '.'), contents.fname.length)}">
+                                                    <th:block th:if="${#strings.contains('.jpg|.png|.jpeg|.ico|.gif', extension)}">
+                                                        <div class="items">
+                                                            <img class="inline-block h-10 w-10 rounded-full" th:src="|/myinfo/images/${contents.fname}|" width="150" height="150" alt="프로필 사진">
+                                                        </div>
+                                                    </th:block>
+                                                </th:block>
+                                            </th:block>
+                                            <th:block th:if="${contents.fname}==null">
+                                                <img class="inline-block h-10 w-10 rounded-full" src="//www.gravatar.com/avatar/1b4378984e52feb7361b0ebf572cb67a?d=identicon&amp;s=96" alt="프로필 사진">
+                                            </th:block>
+                                        </div>
+                                        <div class="min-w-0 flex-1" sec:authorize="isAuthenticated()">
+                                            <form name="commentForm" action="commentOk" method="post">
+                                                <input type="text" name="mid" th:value="${loginOk.mid}" hidden="hidden">
+                                                <input type="text" name="bid" th:value="${contents.bid}" hidden="hidden">
+                                                <style>
+                                                    #container {
+                                                        width: 100%;
+                                                        margin: 20px auto;
+                                                    }
+                                                    .ck-editor__editable[role="textbox"] {
+                                                        /* editing area */
+                                                        min-height: 120px;
+                                                    }
+                                                    .ck-content .image {
+                                                        /* block images */
+                                                        max-width: 80%;
+                                                        margin: 20px auto;
+                                                    }
+                                                </style>
+                                                <div class="remirror-theme rounded-md border border-gray-500/30 shadow-sm dark:border-gray-500/70 container">
+                                                    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+                                                    <label for="content" class="sr-only">editor</label>
+                                                    <textarea id="content" name="content" rows="5"></textarea>
+                                                </div>
+                                                <div class="mt-3 flex items-center justify-end gap-x-4">
+                                                    <button id="commentWriteBt" type="button" class="inline-flex items-center space-x-2 rounded-md bg-blue-500 px-8 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 disabled:bg-blue-500 disabled:opacity-40">
+                                                        댓글 쓰기
+                                                    </button>
+                                                </div>
+                                                <script>
+                                                    let editor;
+                                                    ClassicEditor
+                                                        .create( document.querySelector( '#content' ) )
+                                                        .then( newEditor => {
+                                                            editor = newEditor;
+                                                        } )
+                                                        .catch( error => {
+                                                            console.error( error );
+                                                        } );
+
+                                                    // Assuming there is a <button id="submit">Submit</button> in your application.
+                                                    document.querySelector( '#commentWriteBt' ).addEventListener( 'click', () => {
+                                                        const editorData = editor.getData();
+                                                        if (editorData.length < 1) {
+                                                            alert("게시물을 입력해주세요");
+                                                        } else {
+                                                            commentForm.submit();
+                                                        }
+
+
+                                                        // ...
+                                                    } );
+
+                                                </script>
+                                            </form>
+                                        </div>
+                                        <div sec:authorize="isAnonymous()" class="relative flex-1">
+
+                                            <label  for="comment" class="sr-only">댓글을 쓰려면 로그인이 필요합니다</label>
+                                            <textarea id="comment" name="comment" rows="2" readonly="" class="block w-full resize-none rounded-md border border-gray-500/30 bg-gray-50/50 text-base shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:border-gray-500/70 dark:bg-gray-900/50">
+                                            </textarea>
+
+                                            <p class="group absolute top-2.5 left-2 inline-flex items-start space-x-1 text-sm text-gray-500 hover:text-gray-900">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-5 w-5 shrink-0 text-gray-400 group-hover:text-gray-500">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"></path>
+                                                </svg>
+                                                <span class="text-sm text-gray-500">댓글을 쓰려면 <a class="font-bold underline" style="color:#0090f9;" href="../accounts/login.do">로그인</a>이 필요합니다.</span>
+                                            </p>
+                                            <button type="button" disabled="" class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-500 px-3 py-2 text-sm font-medium text-white shadow-md hover:bg-blue-400 focus:outline-none focus:ring-offset-0 disabled:bg-blue-500 disabled:opacity-40 sm:hidden">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-4 w-4">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10">
+
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="my-8">
+                                    <ul class="divide-y divide-gray-500/30 dark:divide-gray-500/70" th:if="${noComemnts}">
+                                        <li>등록된 댓글이 없습니다</li>
+                                    </ul>
+                                    <ul class="divide-y divide-gray-500/30 dark:divide-gray-500/70" th:if="${commentsList.totalCount==0}">
+                                        <li>등록된 댓글이 없습니다</li>
+                                    </ul>
+                                    <ul class="divide-y divide-gray-500/30 dark:divide-gray-500/70" th:each="comment: ${commentsList.list}">
+                                        <li id="note-1656799" class="py-6">
+                                            <div class="flex items-center space-x-2">
+                                                <div class="flex-shrink-0">
+                                                    <a href="/users/150025">
+                                                        <img class="h-8 w-8 rounded-full sm:h-12 sm:w-12" src="https://lh3.googleusercontent.com/a/AItbvmkyxtDfa9QdHTAf-vTk9Z6_JEoweTlkDYjLq5Sj=s96-c" alt="프로필 사진">
+                                                    </a>
+                                                </div>
+                                                <div class="flex flex-1 flex-col text-sm font-medium">
+                                                    <a class="w-fit pl-0.5 text-gray-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200" href="/users/150025">
+                                                        [[${comment.writer}]]</a>
+
+                                                    <div class="flex items-center space-x-1 text-xs font-normal text-gray-700 dark:text-gray-300">
+                                                        <span>
+                                                            <svg class="inline h-3 w-3" width="9" height="12" viewBox="0 1 9 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <title>bolt icon</title>
+                                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M5.21535 0.575533C5.4443 0.647704 5.6 0.86003 5.6 1.10009V3.85009L7.8 3.85009C8.00508 3.85009 8.19313 3.96419 8.28783 4.14609C8.38254 4.328 8.36818 4.54748 8.25057 4.71549L4.40057 10.2155C4.26291 10.4122 4.0136 10.4968 3.78464 10.4246C3.55569 10.3525 3.4 10.1401 3.4 9.90009L3.4 7.15009H1.2C0.994914 7.15009 0.806866 7.03599 0.712157 6.85408C0.617448 6.67218 0.631811 6.45269 0.749418 6.28468L4.59942 0.784684C4.73708 0.588021 4.98639 0.503362 5.21535 0.575533Z" fill="currentColor">
+
+                                                                </path>
+                                                            </svg>활동점수</span>
+                                                        <span>·</span>
+                                                        <span th:text="${#temporals.format(comment.udate, 'MM.dd HH:mm')}"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="relative flex items-center space-x-3 sm:space-x-7">
+                                                    <div class="flex">
+                                                        <!--
+                                                        <button type="button" class="group relative flex h-[30px] w-[28px] items-center justify-center rounded-l-md border border-gray-500/30 bg-white text-gray-700 hover:border-gray-500/70 focus:z-10 focus:outline-none focus:ring-0 dark:border-gray-500/70 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-gray-500/30">
+                                                            <span class="sr-only">비추천</span>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="hover:text-red-500 group-hover:text-red-500 h-3.5 w-3.5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+                                                            </svg>
+                                                        </button>
+                                                        <span class="flex h-[30px] w-[44px] items-center justify-center border border-x-0 border-gray-500/30 bg-white text-base font-medium text-gray-700 dark:border-gray-500/70 dark:bg-gray-700 dark:text-gray-300">0</span>
+                                                        <button type="button" class="group relative flex h-[30px] w-[28px] items-center justify-center rounded-r-md border border-gray-500/30 bg-white text-gray-700 hover:border-gray-500/70 focus:z-10 focus:outline-none focus:ring-0 dark:border-gray-500/70 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-gray-500/30">
+                                                            <span class="sr-only">추천</span>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="hover:text-blue-500 group-hover:text-blue-500 h-3.5 w-3.5">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"></path>
+                                                            </svg>
+                                                        </button>
+                                                        -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex">
+                                                <span style="margin:3%; width:94%; height:auto;" th:utext="${comment.content}"></span>
+                                            </div>
+                                            <div>
+                                                <div class="flex space-x-4" style="margin-left:3%">
+                                                    <th:block th:if="${loginOk}">
+                                                        <th:block th:if="${comment.writer==loginOk.nick}">
+                                                            <button class="text-xs font-normal text-gray-500 hover:text-blue-500 hover:no-underline focus:outline-none dark:text-gray-400 dark:hover:text-blue-200" th:onclick="|location.href='../articles/del.do/${contents.bid}/${comment.cid}'|">
+                                                                <!-- articlesController - articles/del.do/글 번호 데이터/코멘트 번호 데이터 삭제-->
+                                                                댓글 삭제
+                                                            </button>
+                                                        </th:block>
+                                                    </th:block>
+                                                </div>
+                                                <div class="ml-2.5 border-l-2 pl-4">
+                                                    <section class="mt-5 text-sm" id="headlessui-disclosure-panel-:ra:" data-headlessui-state="">
+                                                        <ul class="divide-y divide-dashed divide-gray-500/30 dark:divide-gray-500/70">
+
+                                                        </ul>
+                                                    </section>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="mt-7 space-y-2 lg:hidden">
+                    </div>
+                </div>
+            </div>
+            <div class="hidden w-[180px] flex-none space-y-4 lg:block">
+                <div class="hidden w-[180px] shrink-0 lg:block">
+                    <div class="flex items-center justify-center rounded-md">
+                        <div class="flex items-center justify-center rounded-md">
+                            <a class="flex flex-col items-center" href="/supports/together">
+                                <img src="/imgs/bom.png">
+                            </a>
+                        </div>
+                        <!--광고?-->
+                    </div>
+                    <div class="mt-10 mb-8">
+                        <div class="hidden lg:flex">
+                            <div class="flex items-center justify-center rounded-md">
+                                <a class="flex flex-col items-center" href="/supports/together">
+                                    <img src="/imgs/zibpalm.png" class="" alt="">
+                                </a>
+                            </div>
+                            <!--광고?-->
+                        </div>
+                    </div>
+                    <div class="my-8">
+                        <div>
+                            <div class="flex items-center justify-center rounded-md">
+                                <a class="flex flex-col items-center" href="/supports/together">
+                                    <img src="/imgs/skream.png">
+
+                                </a>
+                            </div>
+                            <!--광고?-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </main>
+    <th:block th:replace="fragment/footer :: commonFooter">
+    </th:block>
+</body>
+</html>

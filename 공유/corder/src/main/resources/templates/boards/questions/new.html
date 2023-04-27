@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <th:block th:replace="fragment/config :: metaConfig">
+  </th:block>
+
+  <title>Coder - 지식게시판 질문 등록</title>
+  <script
+          src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
+  <style>
+  .ck.ck-editor {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+  }
+
+  .ck-editor__editable {
+      height: 50vh;
+  }
+  </style>
+</head>
+<body class="flex h-full select-auto flex-col font-sans text-gray-900 antialiased dark:bg-gray-800 dark:text-gray-100">
+<th:block th:replace="fragment/header :: commonHeader">
+</th:block>
+<main class="mx-auto mt-2 w-full max-w-7xl px-4 lg:mt-[18px] lg:px-0 b-l-red">
+  <div class="flex lg:space-x-10">
+    <div class="hidden w-[180px] shrink-0 lg:block">
+      <div class="hidden lg:flex">
+        <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 180px; height: 180px;"></ins>
+      </div>
+    </div>
+    <div class="w-full min-w-0 flex-auto lg:static lg:max-h-full lg:overflow-visible">
+      <div class="mb-7 sm:hidden">
+      </div>
+      <div class="space-y-10">
+        <div class="space-y-2">
+          <h3 class="text-xl font-medium sm:text-3xl sm:leading-10">Q&A 글 작성하기</h3>
+        </div>
+        <form action="input.do" name="input" method="post">
+          <input type="text" name="mid" th:value="${member.mid}" hidden="hidden">
+          <div class="space-y-12 sm:space-y-14">
+            <div class="grid grid-cols-1 gap-y-7">
+              <div class="space-y-1">
+                <label for="ccode" class="text-sm font-medium text-gray-700 dark:text-gray-300">토픽</label>
+                <select id="ccode" autocomplete="ccode" class="block w-full rounded-md border-gray-500/30 pl-3 pr-10 text-base placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20" name="ccode">
+                  <option value="" class="dark:bg-gray-500">토픽을 선택해주세요.</option>
+                  <option value="기술" class="dark:bg-gray-500">기술</option>
+                  <option value="커리어" class="dark:bg-gray-500">커리어</option>
+                  <option value="기타" class="dark:bg-gray-500">기타</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <label for="title" class="text-sm font-medium text-gray-700 dark:text-gray-300">제목</label><input type="text" id="title" placeholder="제목을 입력해주세요." class="block w-full appearance-none rounded-md border border-gray-500/30 pl-3 pr-10 text-base placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20" name="title">
+                <label for="writer" class="text-sm font-medium text-gray-700 dark:text-gray-300">작성자</label><input type="text" id="writer" placeholder="닉네임" class="block w-full appearance-none rounded-md border border-gray-500/30 pl-3 pr-10 text-base placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20" name="writer" th:value="${member.nick}" readonly>
+              </div>
+
+              <div class="space-y-1">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">본문</label>
+
+                  <div>
+                    <textarea id="content" name="content"></textarea>
+                  </div>
+                <!-- CKEditor -->
+                <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+                <script>
+                    ClassicEditor
+                    .create(document.querySelector('#content'), {
+                        ckfinder: {
+                            uploadUrl : 'upload'
+                        }
+                    })
+                    .then(content => {
+                        console.log('content was initialized');
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+
+                </script>
+
+              </div>
+
+            </div>
+            <div class="mt-5 flex justify-center gap-x-3 sm:justify-end">
+              <button type="reset" class="w-20 rounded-md border border-gray-500/30 bg-white px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-100 focus:outline-none dark:border-gray-500/70 dark:bg-gray-700 dark:hover:bg-gray-600">취소</button>
+              <button type="submit" class="inline-flex items-center space-x-2 rounded-md bg-blue-500 px-8 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600">등록</button>
+            </div>
+          </div>
+
+
+
+        </form>
+
+      </div>
+      <div class="mt-14 space-y-2 lg:hidden">
+        <div class="hidden items-center lg:flex">
+          <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 180px; height: 380px;"></ins>
+        </div>
+        <div class="flex items-center lg:hidden">
+          <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 840px; height: 140px;"></ins>
+        </div>
+      </div>
+    </div>
+    <div class="hidden w-[180px] flex-none space-y-4 lg:block">
+      <div class="hidden items-center lg:flex">
+        <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 180px; height: 380px;"></ins>
+      </div>
+      <div class="flex items-center lg:hidden">
+        <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 840px; height: 140px;"></ins>
+      </div>
+      <div class="hidden lg:flex">
+        <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 180px; height: 380px;"></ins>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

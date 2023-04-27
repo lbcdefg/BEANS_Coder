@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <th:block th:replace="fragment/config :: metaConfig">
+  </th:block>
+
+  <title>Coder - Q&A 수정</title>
+
+  <!-- include libraries(jQuery, bootstrap) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+  <!-- CDN 한글화 -->
+  <script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
+
+  <script src="/js/trim.js"></script>
+  <script>
+    function check(){
+      var topicspace = input.ccode.value;
+      topic = trim(topicspace);
+      if(topic.length == 0){
+        alert("토픽을 선택해주세요.")
+        return false;
+      }
+      var titlespace = input.title.value;
+      title = trim(titlespace);
+      if(title.length == 0){
+        alert("제목을 입력해 주세요.")
+        input.title.focus();
+        return false;
+      }else{
+        pass = checkByteLen(titlespace, 100);
+        if(!pass){
+          alert("제목은 100글자 이하로 써주세요");
+          input.title.focus();
+          return false;
+        }
+      }
+      var contentspace = input.content.value;
+      content = trim(contentspace);
+      if(content.length == 0){
+        alert("글 내용을 입력해 주세요.")
+        input.content.focus();
+        return false;
+      }else{
+        pass = checkByteLen(contentspace, 4000);
+        if(!pass){
+          alert("글 내용은 4000글자까지 쓸 수 있습니다.");
+          input.content.focus();
+          return false;
+        }
+      }
+      input.submit();
+    }
+    function checkByteLen(str, size){
+        var byteLen = getByteLen(str);
+        if(byteLen <= size){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    function getByteLen(str){
+       return str.replace(/[\0-\x7f]|([0-\u07ff]|(.))/g,"$&$1$2").length;
+    }
+  </script>
+</head>
+<body class="flex h-full select-auto flex-col font-sans text-gray-900 antialiased dark:bg-gray-800 dark:text-gray-100">
+<th:block th:replace="fragment/header :: commonHeader">
+</th:block>
+
+<main class="mx-auto mt-2 w-full max-w-7xl px-4 lg:mt-[18px] lg:px-0 b-l-red">
+  <div class="flex lg:space-x-10">
+    <div class="hidden w-[180px] shrink-0 lg:block">
+      <div class="hidden lg:flex">
+        <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 180px; height: 180px;"></ins>
+      </div>
+    </div>
+    <div class="w-full min-w-0 flex-auto lg:static lg:max-h-full lg:overflow-visible">
+      <div class="mb-7 sm:hidden">
+      </div>
+      <div class="space-y-10">
+        <div class="space-y-2">
+          <h3 class="text-xl font-medium sm:text-3xl sm:leading-10">지식 게시글 수정</h3>
+        </div>
+        <form action="updateOk.do" name="input" method="post" enctype="multipart/form-data">
+          <input type="text" name="bid" th:value="${contents.bid}" hidden="hidden">
+          <input type="text" name="mid" th:value="${loginOk.mid}" hidden="hidden">
+          <div class="space-y-12 sm:space-y-14" th:each="content: ${contents}">
+            <div class="grid grid-cols-1 gap-y-7">
+              <div class="space-y-1">
+                <label for="ccode" class="text-sm font-medium text-gray-700 dark:text-gray-300">토픽</label>
+                <select id="ccode" autocomplete="ccode" class="block w-full rounded-md border-gray-500/30 pl-3 pr-10 text-base placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20" name="ccode">
+                  <option value="" class="dark:bg-gray-500">토픽을 선택해주세요.</option>
+                  <option value="news" class="dark:bg-gray-500">Tech뉴스</option>
+                  <option value="tips" class="dark:bg-gray-500">팁</option>
+                  <option value="column" class="dark:bg-gray-500">칼럼</option>
+                  <option value="review" class="dark:bg-gray-500">리뷰</option>
+                </select>
+                <input type="hidden" name="cmain" value="knowledge">
+              </div>
+              <div class="space-y-1">
+                <label for="title" class="text-sm font-medium text-gray-700 dark:text-gray-300">제목</label><input type="text" id="title" placeholder="제목을 입력해주세요." class="block w-full appearance-none rounded-md border border-gray-500/30 pl-3 pr-10 text-base placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20" name="title" th:value="${content.title}">
+                <label for="writer" class="text-sm font-medium text-gray-700 dark:text-gray-300">작성자</label><input type="text" id="writer" placeholder="닉네임" class="block w-full appearance-none rounded-md border border-gray-500/30 pl-3 pr-10 text-base placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20" name="writer" th:value="${loginOk.nick}" readonly>
+              </div>
+              <div th:if="${!fileup.isEmpty()}">
+                <div class="fileList-wrapper">
+                  <select onchange="window.open(value, '_self');">
+                    <option value="" selected>삭제 파일 선택</option>
+                    <th:block th:each="file : ${fileup}">
+                      <option th:value="@{${contents.bid} + '/del.do/' + ${file.fid}}">
+                        [[${file.ofname}]]
+                      </option>
+                    </th:block>
+                  </select>
+                </div>
+              </div>
+              <div class="space-y-1 ck-container">
+                <!--<script src="/js/ckeditor/ckeditor.js"></script>-->
+                <label for="summernote" class="text-sm font-medium text-gray-700 dark:text-gray-300">본문</label>
+                <textarea id="summernote" name="content" th:utext="${contents.content}"></textarea>
+                <!-- CKEditor -->
+                <script>
+                        $('#summernote').summernote({
+                            placeholder: '대화를 재미있게 이끌어가는 생각이 있으신가요?',
+                            tabsize: 1,
+                            height: 350,
+                            lang: "ko-KR",
+                            focus: true,
+                            disableResizeEditor: true,
+							callbacks: {	//이미지 첨부하는 부분
+                                onImageUpload : function(files) {
+                                      uploadSummernoteImageFile(files[0],this);
+                                },
+                                onPaste: function (e) {
+                                    var clipboardData = e.originalEvent.clipboardData;
+                                    if (clipboardData && clipboardData.items && clipboardData.items.length) {
+                                        var item = clipboardData.items[0];
+                                        if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+                                            e.preventDefault();
+                                        }
+                                    }
+                                }
+                            },
+                            toolbar: [
+								// [groupName, [list of button]]
+								['fontname', ['fontname']],
+								['fontsize', ['fontsize']],
+								['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+								['color', ['forecolor','color']],
+								['table', ['table']],
+								['para', ['ul', 'ol', 'paragraph']],
+								['height', ['height']],
+								['insert',['picture','link','video']],
+						  	],
+							fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체', '210썸타임L', '210썸타임B', '나눔스퀘어L', '나눔스퀘어B',],
+							fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72']
+
+                        });
+                        function uploadSummernoteImageFile(file, editor) {
+                            data = new FormData();
+                            data.append("file", file);
+                            $.ajax({
+                                data : data,
+                                type : "POST",
+                                url : "/articles/update/uploadSummernoteImageFile",
+                                contentType : false,
+                                enctype: 'multipart/form-data',
+                                processData : false,
+                                success : function(data) {
+                                    console.log("data: " + data.url);
+
+                                    $(editor).summernote('editor.insertImage',data.url);
+                                    $('#summernote').append('<p><img src="'+data.url+'" width="480" height="auto"/></>p>');
+
+
+                                    //항상 업로드된 파일의 url이 있어야 한다.
+                                },
+                                error : function(e) {
+                                    console.log(e);
+                                }
+                            });
+                        }
+                    </script>
+                <input type="file" multiple="multiple" name="files" accept="image/*" />
+                <script>
+                  function isFileImage(file) {
+                      return file && file['type'].split('/')[0] === 'image';
+                  }
+                </script>
+              </div>
+            </div>
+            <div class="mt-5 flex justify-center gap-x-3 sm:justify-end">
+              <button type="reset" class="w-20 rounded-md border border-gray-500/30 bg-white px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-100 focus:outline-none dark:border-gray-500/70 dark:bg-gray-700 dark:hover:bg-gray-600">취소</button>
+              <button type="button" class="inline-flex items-center space-x-2 rounded-md bg-blue-500 px-8 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600" onclick="check()">수정</button>
+            </div>
+          </div>
+
+
+
+        </form>
+
+      </div>
+      <div class="mt-14 space-y-2 lg:hidden">
+        <div class="hidden items-center lg:flex">
+          <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 180px; height: 380px;"></ins>
+        </div>
+        <div class="flex items-center lg:hidden">
+          <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 840px; height: 140px;"></ins>
+        </div>
+      </div>
+    </div>
+    <div class="hidden w-[180px] flex-none space-y-4 lg:block">
+      <div class="hidden items-center lg:flex">
+        <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 180px; height: 380px;"></ins>
+      </div>
+      <div class="flex items-center lg:hidden">
+        <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 840px; height: 140px;"></ins>
+      </div>
+      <div class="hidden lg:flex">
+        <ins class="adsbygoogle" data-adtest="off" data-ad-client="ca-pub-8103607814406874" data-ad-slot="6573675943" style="display: inline-block; width: 180px; height: 380px;"></ins>
+      </div>
+    </div>
+  </div>
+</main>
+<th:block th:replace="fragment/footer :: commonFooter">
+</th:block>
+</body>
+</html>

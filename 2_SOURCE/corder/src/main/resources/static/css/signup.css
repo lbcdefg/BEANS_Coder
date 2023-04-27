@@ -1,0 +1,187 @@
+
+body {
+    font-family: '나눔스퀘어L';
+    background-color: rgb(255, 255, 255);
+}
+* {
+    box-sizing: border-box;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    margin: 150px auto;
+    padding: 0;
+    max-width: 350px;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.953);=
+}
+form {
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+}
+.top-container {
+    display: inherit;
+    flex-direction: inherit;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    align-items: center;
+    border: .2px solid  rgba(166, 166, 166, 0.799);
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.953);
+}
+
+.logo-wrapper{
+    display: block;
+    margin: 20px auto;
+    width: 80%;
+    padding:5px;
+    border-radius: 35px;
+    text-align:center;
+}
+.logo-wrapper:hover{
+    cursor: pointer;
+}
+#logo_a {
+    color:rgb(255,255,255);
+    font-size: 2.5rem;
+    font-weight:900;
+
+}
+
+.inner-middle-container {
+    display: inherit;
+    flex-direction: inherit;
+    width: 90%;
+    padding: 5px;
+    justify-content: center;
+}
+.email-wrapper, .verifying-wrapper {
+    display:flex;
+    width: 100%;
+    margin-left:2.5%;
+    margin-bottom:.45rem;
+    font-size:1rem;
+}
+
+.name-wrapper, .pwd-wrapper, .signupbt-wrapper {
+    display: inherit;
+    flex-direction: inherit;
+    width: 100%;
+    font-size:1rem;
+}
+.nick-wrapper {
+    display: inherit;
+    flex-direction: inherit;
+    width: 100%;
+    font-size:1rem;
+}
+
+#valid{
+    display:inline; color:red; font-size:10px; width:95%;
+    margin-left:8px;
+}
+.signupbt-wrapper{
+    width: 100%;
+    margin:10px auto;
+    padding: 3px;
+    text-align: center;
+    border-radius: 3px;
+    background-color: rgb(255, 255, 255)
+}
+
+#name, #nick, #password, #password2{
+    width: 95%;
+    color: rgb(0, 0, 0);
+    margin: 6px auto;
+    border: .1px solid rgba(227, 225, 225, 0.799);
+    border-radius: 3px;
+    line-height: 30px;
+    height: 40px;
+    background-color: rgba(241, 241, 241, 0.704);
+}
+
+.email, .verifyingCode {
+    display:inline;
+    margin:0;
+    padding:0;
+}
+.checkEmailBt, .verifyingCodeBt {
+    display:inline-block;
+    width:20%;
+    margin:0;
+    padding:0;
+    margin-left:10px;
+}
+#email, #verifyingCode {
+    width: 220px;
+    color: rgb(0, 0, 0);
+    border: .1px solid rgba(227, 225, 225, 0.799);
+    border-radius: 3px;
+    line-height: 30px;
+    height: 40px;
+    background-color: rgba(241, 241, 241, 0.704);
+}
+
+#checkEmailBt, #verifyingCodeBt {
+    width: 60px;
+    color: rgb(0, 0, 0);
+    border: .1px solid rgba(227, 225, 225, 0.799);
+    border-radius: 3px;
+    line-height: 30px;
+    height: 40px;
+    font-size:.7rem;
+}
+#checkEmailBt {
+    border: .5px solid navy;
+}
+#email:focus, #verifyingCode:focus, #name:focus, #nick:focus, #password1:focus, #password2:focus{
+    outline: none;
+}
+input::placeholder {
+    font-size:11px;
+    font-weight:200;
+}
+
+#signupbt {
+    margin: 3px auto;
+    width: 95%;
+    line-height: 30px;
+    color: rgb(21, 77, 158);
+    font-weight:900;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(204, 204, 204, .8);
+}
+#signupbt:hover, #verifyingCodeBt:hover, #checkEmailBt:hover {
+    cursor:pointer;
+}
+
+.bottom-container{
+    display: block;
+    margin: 20px auto;
+    padding: 0;
+    width: 100%;
+    height: 60px;
+    border: .2px solid rgba(166, 166, 166, 0.799);
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.953);
+}
+.login-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 0;
+    text-align:center;
+
+}
+#login_a {
+
+    color: rgb(21, 77, 158);
+    font-weight: bold;
+    text-decoration-line: none;
+}

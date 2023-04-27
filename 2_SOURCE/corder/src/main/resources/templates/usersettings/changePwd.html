@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="fragment/config :: metaConfig">
+  </th:block>
+  <th:block th:replace="fragment/commonjs :: commonJs">
+  </th:block>
+  <title>Corder - 비밀번호 변경</title>
+  <script type="text/javascript" language="javascript"
+          src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script>
+      $(function(){
+          $("#checkCurrPwd").on("keyup", function(){
+              var checkCurrPwd = $("#checkCurrPwd").val();
+              checkCurrPwd = checkCurrPwd.trim();
+              if(checkCurrPwd.length > 1) {
+                  $.ajax({
+                      type : "GET",
+                      url : "checkCurrPwd",
+                      data: {mid: $("#mid").val(), password: $("#checkCurrPwd").val()},
+                      success : function(result){
+                          console.log("result :" + result);
+                          if (result == true) {
+                              pwdConfirmChk = false;
+                              var html = "";
+                              html += "<span id='pwdConfirmChk'>";
+                              html += "현재 비밀번호와 일치합니다.";
+                              html += "</span>"
+                              $('#checkPwdResult').html(html);
+                              $("#pwdConfirmChk").css({
+                                  "color" : "#0D6EFD",
+                                  "font-weight" : "bold",
+                                  "font-size" : "10px"
+                              });
+                          } else if (result == false) {
+                              pwdConfirmChk = true;
+                              var html = "";
+                              html += "<span id='pwdConfirmChk'>";
+                              html += "현재 비밀번호와 일치하지 않습니다.";
+                              html += "</span>"
+                              $('#checkPwdResult').html(html);
+                              $("#pwdConfirmChk").css({
+                                  "color" : "#FA3E3E",
+                                  "font-weight" : "bold",
+                                  "font-size" : "10px"
+                              });
+                          }
+                      }
+                  });
+              }
+          });
+      });
+      function doCheck(){
+          var password = document.getElementById("password").value; //비밀번호
+          var password2 = document.getElementById("password2").value; // 확인 비밀번호
+          password = password.trim();
+          password2 = password2.trim();
+          updatePwdForm.submit();
+      }
+
+  </script>
+</head>
+<body class="flex h-full select-auto flex-col font-sans text-gray-900 antialiased dark:bg-gray-800 dark:text-gray-100">
+
+  <div id="__next">
+    <div class="mt-20 flex justify-center px-6 pb-16 sm:mt-32 sm:px-0">
+      <div class="w-full max-w-md">
+        <div class="logo-wrapper bg-color" style="text-align:center; font-size:3rem; font-weight:bold; width:50%; height:60px; line-height:60px; border-radius:30px; margin:auto;">
+          <a id="logo_a" href="/" >
+            Coder
+          </a>
+        </div>
+        <center>
+          <br/><br/>
+          <strong class="mt-6 text-center font-bold">변경하실 비밀번호를 입력해주세요.</strong>
+        </center>
+        <div class="mx-4 sm:mx-0">
+          <form class="mt-8 space-y-6" name="updatePwdForm" action="updatePwd.do" method="post">
+            <input type="hidden" id="mid" th:value="${loginOk.mid}">
+            <div>
+              <div class="space-y-6 rounded-md shadow-sm">
+                <div>
+                  <label for="checkCurrPwd" class="block text-sm font-medium text-gray-700 dark:text-gray-300">현재 비밀번호</label>
+                  <div class="mt-1">
+                    <input type="password" id="checkCurrPwd" autocomplete="" class="block w-full appearance-none rounded-md border border-gray-500/30 bg-white px-3 py-2 text-sm placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20 dark:focus:border-gray-500 sm:text-base">
+                  </div>
+                  <div id="checkPwdResult" style="width: 95%; margin-left:3%;">
+                    <span id="valid"></span>
+                  </div>
+                </div>
+                <div>
+                  <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">신규 비밀번호</label>
+                  <div class="mt-1">
+                    <input id="password" type="password" name="password" placeholder="비밀번호(영문, 숫자, 특수기호 8-15자)" class="block w-full appearance-none rounded-md border border-gray-500/30 bg-white px-3 py-2 text-sm placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20 dark:focus:border-gray-500 sm:text-base">
+                  </div>
+                  <div style="width: 95%; margin-left:3%; font-size:.7rem; color:red;">
+                    <span id="valid">[[${valid_password}]]</span>
+                  </div>
+                </div>
+                <div>
+                  <label for="password2" class="block text-sm font-medium text-gray-700 dark:text-gray-300">신규 비밀번호 확인</label>
+                  <div class="mt-1">
+                    <input id="password2" type="password" name="password2" autocomplete="" class="block w-full appearance-none rounded-md border border-gray-500/30 bg-white px-3 py-2 text-sm placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20 dark:focus:border-gray-500 sm:text-base">
+                  </div>
+                  <div style="width: 95%; margin-left:3%; font-size:.7rem; color:red;">
+                    <span id="valid">[[${notEqual}]] [[${valid_password2}]]</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button type="button" class="relative flex w-full justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-400 focus:outline-none"
+                      onclick="doCheck()">비밀번호 변경</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

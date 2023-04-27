@@ -1,0 +1,202 @@
+body {
+    font-family: '나눔스퀘어L';
+    background-color: rgb(255, 255, 255);
+}
+* {
+    box-sizing: border-box;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    margin: 150px auto;
+    padding: 0;
+    max-width: 350px;
+
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.953);
+
+}
+form {
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+}
+.top-container {
+    display: inherit;
+    flex-direction: inherit;
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    align-items: center;
+    border: .2px solid  rgba(166, 166, 166, 0.799);
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.953);
+}
+
+.logo-wrapper{
+    display: block;
+    margin: 20px auto;
+    width: 80%;
+    padding:5px;
+    text-align:center;
+    border-radius: 35px;
+}
+.logo-wrapper:hover{
+    cursor: pointer;
+}
+#logo_a {
+    color:rgb(255,255,255);
+    font-size: 2.5rem;
+    font-weight:900;
+}
+
+.inner-middle1-container {
+    display: inherit;
+    flex-direction: inherit;
+    width: 90%;
+    padding: 5px;
+    justify-content: center;
+}
+.email-wrapper, .pwd-wrapper, .loginbt-wrapper {
+    display: inherit;
+    flex-direction: inherit;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    font-size:1rem;
+
+}
+#email_input, #pwd_input{
+    width: 95%;
+    color: rgb(0, 0, 0);
+    margin: 6px auto;
+    border: .1px solid rgba(227, 225, 225, 0.799);
+    border-radius: 3px;
+    line-height: 30px;
+    height: 40px;
+    background-color: rgba(241, 241, 241, 0.704);
+}
+#email_input:focus, #pwd_input:focus{
+    outline: none;
+}
+
+#loginbt {
+    margin: 3px auto;
+    width: 95%;
+    line-height: 30px;
+    color: rgb(21, 77, 158);
+    font-weight:900;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(204, 245, 80)
+}
+#loginbt:hover{
+    cursor:pointer;
+}
+.loginbt-wrapper{
+    width: 100%;
+    margin:10px auto;
+    padding: 3px;
+    text-align: center;
+    border-radius: 3px;
+    background-color: rgb(255, 255, 255)
+}
+.inner-middle2-container{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 90%;
+    padding: 5px;
+    justify-content: center;
+}
+.left-hr-wrapper, .right-hr-wrapper, .center-or-wrapper{
+    float: left;
+    margin: 0;
+    padding:0;
+    color: rgba(108, 108, 108, 0.873);
+}
+.left-hr-wrapper, .right-hr-wrapper {
+    width: 40%;
+}
+.center-or-wrapper{
+    width: 20%;
+    justify-content: center;
+    text-align: center;
+}
+.inner-middle3-container{
+    clear: both;
+    display: inherit;
+    flex-direction: column;
+    width: 80%;
+    padding: 5px;
+    text-align: center;
+    justify-content: center;
+}
+.findpwd-wrapper{
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    width: 100%;
+    height: auto;
+    justify-content: center;
+    color:
+    border:1px solid green;
+}
+.icon-wrapper{
+    display: inline-flex;
+    flex-direction: row;
+    width: 40%;
+    height: 35px;
+    justify-content: center;
+}
+#facebookicon {
+    background-image: url("/imgs/facebookicon.png");
+    background-repeat: no-repeat;
+    background-size: 25px,25px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+#googleicon{
+    background-image: url("/imgs/googleicon.png");
+    background-repeat: no-repeat;
+    background-size: 25px,25px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+.inner-middle3-container > p {
+    color: navy;
+    font-size: 1em;
+}
+.bottom-container{
+    display: block;
+    margin: 20px auto;
+    padding: 0;
+    width: 100%;
+    height: 60px;
+    border: .2px solid rgba(166, 166, 166, 0.799);
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.953);
+}
+.signup-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 0;
+    text-align:center;
+
+}
+#findpwd {
+    font-family: '나눔스퀘어B';
+    color: rgb(21, 77, 158);
+    font-weight: 600;
+    text-decoration-line: none;
+}
+#signup_a {
+    font-family: '나눔스퀘어B';
+    color: rgb(21, 77, 158);
+    font-weight: bold;
+    text-decoration-line: none;
+}

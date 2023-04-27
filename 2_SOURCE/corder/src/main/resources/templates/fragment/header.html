@@ -1,0 +1,271 @@
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="commonHeader">
+  <header class="header-container sticky top-0 z-20 flex h-16 items-center border-b border-b-gray-500/30 bg-color py-5 text-sm font-medium leading-6 dark:border-b-gray-500/70 dark:bg-gray-800" data-headlessui-state="">
+    <nav aria-label="Global" class="mx-auto flex w-full max-w-7xl px-4 lg:px-0">
+      <div class="flex w-full items-center justify-between font-color-w">
+        <div class="flex">
+          <a href="/" class="flex items-center"style="color:rgb(255,255,255); font-size: 2.5rem; font-weight:900;">
+            Coder
+          </a>
+          <div class="ml-3 hidden items-center space-x-7 md:flex lg:ml-[105px]">
+            <div class="shrink-0">
+              <a class="text-white-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200 text-sm font-medium hover:no-underline" href="/questions">Q&amp;A
+              </a>
+            </div>
+            <div class="shrink-0">
+              <a class="text-white-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200 text-sm font-medium hover:no-underline" href="/knowledge">지식</a>
+            </div>
+            <div class="shrink-0">
+              <a class="text-white-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200 text-sm font-medium hover:no-underline" href="/community">커뮤니티</a>
+            </div>
+            <div class="shrink-0">
+              <a class="text-white-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200 text-sm font-medium hover:no-underline" href="/events">이벤트</a>
+            </div>
+            <div class="h-3 w-[1px] bg-gray-400 dark:bg-gray-400/70"></div>
+            <div class="shrink-0">
+              <a class="text-white-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200 text-sm font-medium" href="/jobs">
+                <span class="hover:no-underline">JOBS</span></a>
+            </div>
+            <div class="h-3 w-[1px] bg-gray-400 dark:bg-gray-400/70"></div>
+            <div class="shrink-0">
+              <a class="text-white-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200 text-sm font-medium" href="/notice">
+                <span class="hover:no-underline">공지사항</span></a>
+            </div>
+          </div>
+        </div>
+        <div class="hidden items-center md:flex">
+          <div class="flex items-center gap-x-6">
+            <div class="w-40 lg:w-[235px]">
+              <div class="flex h-[35px] items-center rounded-[43px] border border-gray-300 py-0 transition-colors focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 dark:border-gray-700 dark:bg-gray-700">
+                <button class="-my-0.5 -mr-1.5 flex h-8 w-8 flex-shrink-0 items-center justify-center transition duration-300">
+                  <span class="sr-only">Search Bar</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-3.5 w-3.5 text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-200">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path></svg>
+                </button>
+                <input class="w-full border-none bg-transparent p-0 pr-2 text-white-900 text-sm font-normal placeholder-white-500/80 focus:border-gray-500 focus:outline-none focus:ring-0" type="text" placeholder="검색">
+              </div>
+            </div>
+            <button class="bg-blue-500 relative inline-flex h-8 w-14 items-center rounded-full sm:h-6 sm:w-11" id="headlessui-switch-:r2:" role="switch" tabindex="0" aria-checked="false" data-headlessui-state="" type="button">
+              <span class="sr-only">Enable Darkmode</span>
+              <span class="absolute top-1 right-0.5 sm:top-0.5">
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-6 w-6 text-yellow-400 sm:h-5 sm:w-5">
+                                      <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z">
+
+                                  </path>
+                                  </svg>
+                              </span>
+              <span class="translate-x-1 sm:translate-x-0.5 inline-block h-6 w-6 transform rounded-full bg-white transition sm:h-5 sm:w-5"></span>
+            </button>
+            <th:block sec:authorize="isAuthenticated()">
+            <div class="ml-[102px] mr-5">
+              <a href="">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-5 w-5 text-gray-400 hover:cursor-pointer hover:text-blue-500 dark:hover:text-blue-200"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"></path></svg>
+              </a>
+            </div>
+            <div class="mr-5">
+              <div class="relative" data-headlessui-state="">
+                <button class="relative -my-1 flex h-8 w-6 items-center justify-center rounded-sm text-gray-400 hover:text-blue-500 focus:outline-0 focus:ring-0 dark:hover:text-blue-200" id="headlessui-popover-button-:r3:" type="button" aria-expanded="false" data-headlessui-state="">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0">
+                    </path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="relative">
+              <div class="relative" data-headlessui-state="">
+                <div class="hiddenBt">
+                <button class="closePopupBt flex rounded-full bg-white focus:outline-none dark:bg-gray-800" id="headlessui-menu-button-:rj:" type="button" aria-haspopup="true" aria-expanded="true" data-headlessui-state="open" aria-controls="headlessui-menu-items-:r6r:">
+                  <span class="sr-only">Open user menu</span>
+                  <span class="hidden flex-shrink-0 sm:flex">
+                    <th:block th:if="${userImage}">
+                      <th:block th:with="extension=${#strings.substring(userImage.fname, #strings.indexOf(userImage.fname, '.'), userImage.fname.length)}">
+                        <th:block th:if="${#strings.contains('.jpg|.png|.jpeg|.ico|.gif', extension)}">
+                          <div class="items">
+                            <img class="h-8 w-8 rounded-full" th:src="|/myinfo/images/${userImage.fname}|" alt="프로필 사진">
+                          </div>
+                        </th:block>
+                      </th:block>
+                    </th:block>
+                    <th:block th:if="${nothing}">
+                       <img class="h-8 w-8 rounded-full" src="//www.gravatar.com/avatar/31912249a6ca1075c84bedba97699546?d=identicon&amp;s=96" alt="프로필 사진">
+                    </th:block>
+
+                  </span>
+                </button>
+                </div>
+                <div class="showBt">
+                <button class="showPopupBt flex rounded-full bg-white focus:outline-none dark:bg-gray-800" id="headlessui-menu-button-:r6:" type="button" aria-haspopup="true" aria-expanded="false" data-headlessui-state="">
+                  <span class="sr-only">Open user menu</span>
+                  <span class="hidden flex-shrink-0 sm:flex">
+                    <th:block th:if="${userImage}">
+                      <th:block th:with="extension=${#strings.substring(userImage.fname, #strings.indexOf(userImage.fname, '.'), userImage.fname.length)}">
+                        <th:block th:if="${#strings.contains('.jpg|.png|.jpeg|.ico|.gif', extension)}">
+                          <div class="items">
+                            <img class="h-8 w-8 rounded-full" th:src="|/myinfo/images/${userImage.fname}|" alt="프로필 사진">
+                          </div>
+                        </th:block>
+                      </th:block>
+                    </th:block>
+                    <th:block th:if="${nothing}">
+                      <img class="h-8 w-8 rounded-full" src="//www.gravatar.com/avatar/31912249a6ca1075c84bedba97699546?d=identicon&amp;s=96" alt="프로필 사진">
+                    </th:block>
+
+                  </span>
+                </button>
+                </div>
+                <div class="minipopup absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-500/30 rounded-md bg-white py-1 shadow-lg ring-1 ring-gray-900 ring-opacity-5 focus:outline-none dark:divide-gray-500/70 dark:border dark:border-gray-700 dark:bg-gray-800 transform opacity-100 scale-100" aria-labelledby="headlessui-menu-button-:r6:" id="headlessui-menu-items-:r1q:" role="menu" tabindex="0" data-headlessui-state="open">
+                  <div class="space-y-5 py-3 px-10" role="none">
+                    <a class="flex items-center text-sm text-gray-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200" id="headlessui-menu-item-:r1r:" role="menuitem" tabindex="-1" data-headlessui-state="" href="/settings">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="mr-2 h-4 w-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg>내 프로필
+                    </a>
+                    <a class="flex items-center text-sm text-gray-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200" id="headlessui-menu-item-:r1s:" role="menuitem" tabindex="-1" data-headlessui-state="" href="/settings/account">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="mr-2 h-4 w-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495"></path></svg>내 계정
+                    </a>
+                    <a class="flex items-center text-sm text-gray-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200" id="headlessui-menu-item-:r1t:" role="menuitem" tabindex="-1" data-headlessui-state="" href="/users/me"><svg class="mr-2 h-4 w-4" width="16" height="16" viewBox="0 -1 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 5.5V7.80769L8.5 9.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M1 1.5L1 4.75H1.43783M13 6.25C12.6295 3.29027 10.0949 1 7.0233 1C4.49549 1 2.33137 2.55113 1.43783 4.75M1.43783 4.75H4M12.6088 9.25C11.7152 11.4489 9.55111 13 7.0233 13C3.9517 13 1.41711 10.7097 1.0466 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>활동내역
+                    </a>
+                  </div>
+                  <div class="space-y-5 py-3 px-10" role="none">
+                    <a sec:authorize="isAuthenticated()" href="/accounts/logout.do" class="flex items-center text-sm text-gray-900 hover:text-blue-500 dark:text-gray-100 dark:hover:text-blue-200" id="headlessui-menu-item-:r1u:" role="menuitem" tabindex="-1" data-headlessui-state=""><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="mr-2 h-4 w-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"></path></svg>로그아웃</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </th:block>
+          </div>
+            <button id="loginBt" sec:authorize="isAnonymous()" class="ml-2 hidden h-[35px] w-[85px] items-center justify-center rounded-3xl border border-gray-500/30
+                                    bg-white text-center text-xs font-medium text-gray-900 shadow-sm hover:bg-gray-100
+                                    focus:outline-none dark:border-gray-500/70 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 sm:flex lg:ml-10"
+                    onclick="location.href='/accounts/login.do'">로그인</button>
+            <button id="signupBt" sec:authorize="isAnonymous()" class="ml-2.5 hidden h-[35px] w-[85px] items-center justify-center
+                        rounded-3xl border border-transparent bg-blue-500 px-2 py-0.5 text-xs font-medium text-gray-900 hover:bg-blue-400
+                        focus:outline-none focus:ring-offset-0 sm:flex" onclick="location.href='/accounts/signup.do'">회원가입</button>
+          <!--
+          <button id="logoutBt"  class="ml-2 hidden h-[35px] w-[85px] items-center justify-center rounded-3xl border border-gray-500/30
+                                    bg-white text-center text-xs font-medium text-gray-900 shadow-sm hover:bg-gray-100
+                                    focus:outline-none dark:border-gray-500/70 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 sm:flex lg:ml-10"
+                    onclick="location.href='accounts/logout.do'">로그아웃</button>
+                    -->
+        </div>
+        <div class="right-0 flex shrink-0 md:hidden">
+          <button  class="showMenu inline-flex items-center justify-center rounded-md bg-transparent p-2 text-blue-500 last:-mr-2 hover:bg-gray-900/10 focus:outline-none dark:hover:bg-gray-100/10" id="headlessui-popover-button-:r0:" type="button" aria-expanded="false" data-headlessui-state="">
+            <span class="sr-only">Open main menu</span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="block h-6 w-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path></svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="modal md:hidden">
+      <div class="fixed inset-0 z-20 bg-black bg-opacity-25 dark:bg-white dark:bg-opacity-25 opacity-100" id="headlessui-popover-overlay-:r4:" aria-hidden="true" data-headlessui-state="open">
+      </div>
+      <div class="modal_show absolute inset-x-0 top-0 z-20 mx-auto w-full max-w-3xl origin-top transform p-2 transition opacity-100 scale-100" id="headlessui-popover-panel-:r1:" tabindex="-1" data-headlessui-state="open">
+        <div class="modal_show h-[800px] divide-y divide-gray-500/30 rounded-lg bg-white shadow-lg ring-1 ring-gray-900 ring-opacity-5 dark:divide-gray-500/70 dark:bg-gray-800">
+          <div class="pb-2 pt-3">
+            <div class="flex items-center justify-between px-4">
+              <a href="/" class="flex items-center"style="color:rgb(0,102,153); font-size: 2.2rem; font-weight:bold;">
+                Coder
+              </a>
+              <div class="-mr-2 flex items-center gap-x-4">
+                <button class="closeMenu inline-flex items-center justify-center rounded-md bg-gray-900/10 p-2 text-gray-400 hover:bg-gray-300 hover:text-blue-500 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-100/10 dark:hover:text-blue-200" type="button" data-headlessui-state="open">
+                  <span class="sr-only">Close menu</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+              </div>
+            </div>
+            <div class="mt-3 space-y-1 px-2">
+              <a class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-500 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-blue-200" href="/questions">Q&amp;A</a>
+              <a class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-500 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-blue-200" href="/knowledge">지식</a>
+              <a class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-500 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-blue-200" href="/community">커뮤니티</a>
+              <a class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-500 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-blue-200" href="/events">이벤트</a>
+              <a class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-500 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-blue-200" href="/notice">공지사항</a>
+              <a class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-500 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-blue-200" href="/jobs">JOBS</a>
+            </div>
+          </div>
+          <div sec:authorize="isAuthenticated()" class="pb-2 pt-4">
+            <div class="flex items-center px-5">
+              <div class="flex-shrink-0" style="z-index:21;">
+                  <th:block th:if="${userImage}" th:with="extension=${#strings.substring(userImage.fname, #strings.indexOf(userImage.fname, '.'), userImage.fname.length)}">
+                    <th:block th:if="${#strings.contains('.jpg|.png|.jpeg|.ico|.gif', extension)}">
+                      <div class="items">
+                        <img class="rounded-full border-2 border-gray-200" th:src="|/myinfo/images/${userImage.fname}|" width="100" height="100" alt="프로필 사진">
+                      </div>
+                    </th:block>
+                  </th:block>
+              </div>
+              <th:block th:if="${nothing}">
+                    <img class="rounded-full" src="/imgs/logodefault.png" width="100" height="100" alt="프로필 사진">
+              </th:block>
+
+              <div class="ml-3 min-w-0 flex-1">
+                <div class="truncate text-base font-medium"><th:block th:if="${loginOk}">[[${loginOk.nick}]]</th:block></div>
+                <div class="truncate text-sm font-medium text-gray-500 dark:text-gray-500"><th:block th:if="${loginOk}">[[${loginOk.email}]]</th:block></div>
+              </div>
+            </div>
+            <div class="mt-3 space-y-1 px-2">
+              <a class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-500 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-blue-200" href="/settings/profile">회원정보</a>
+              <a class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-500 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-blue-200" href="/settings/account">계정</a>
+              <a class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-500 dark:text-gray-100 dark:hover:bg-gray-600 dark:hover:text-blue-200" href="/users/me">활동 내역</a>
+            </div>
+          </div>
+          <div class="flex items-center justify-between py-4 px-5">
+            <div class="flex gap-x-4">
+              <button style="color:gray;" id="hidden-loginBt" sec:authorize="isAnonymous()" class="hidden-loginBt flex h-8 w-20 items-center justify-center rounded-3xl border border-gray-500/30 bg-white text-center text-xs font-medium text-gray-900 shadow-sm hover:bg-gray-100 focus:outline-none dark:border-gray-500/70 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 sm:hidden" onclick="location.href='/accounts/login.do'">로그인
+              </button>
+              <button style="color:gray;" id="hidden-logoutBt" sec:authorize="isAuthenticated()" class="hidden-logoutBt flex h-8 w-20 items-center justify-center rounded-3xl border border-gray-500/30 bg-white text-center text-xs font-medium text-gray-900 shadow-sm hover:bg-gray-100 focus:outline-none dark:border-gray-500/70 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 sm:hidden" onclick="location.href='/accounts/logout.do'">로그아웃</button>
+              </button>
+              <button style="color:gray;" id="hidden-signupBt" sec:authorize="isAnonymous()" class="hidden-signupBt flex h-8 w-20 items-center justify-center rounded-3xl border border-transparent bg-blue-500 text-xs font-medium text-white hover:bg-blue-400 focus:outline-none focus:ring-offset-0 sm:hidden" onclick="location.href='accounts/signup.do'">회원가입</button>
+            </div>
+            <div class="flex items-center px-1">
+              <button class="bg-blue-500 relative inline-flex h-8 w-14 items-center rounded-full sm:h-6 sm:w-11" id="headlessui-switch-:r8:" role="switch" tabindex="0" aria-checked="false" data-headlessui-state="" type="button"><span class="sr-only">Enable Darkmode</span>
+                <span class="absolute top-1 right-0.5 sm:top-0.5">
+                                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="h-6 w-6 text-yellow-400 sm:h-5 sm:w-5">
+                                          <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"></path>
+                                          </svg>
+                                      </span>
+                <span class="translate-x-1 sm:translate-x-0.5 inline-block h-6 w-6 transform rounded-full bg-white transition sm:h-5 sm:w-5">
+                                      </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+        const showMenuBt = document.querySelector('.showMenu');
+        const closeMenuBt = document.querySelector('.closeMenu');
+        const modal = document.querySelector('.modal');
+        showMenuBt.addEventListener('click', () => {
+            modal.style.display = 'block';
+
+        });
+        closeMenuBt.addEventListener('click', () => {
+            modal.style.display = 'none';
+
+        });
+        const showPopupBt = document.querySelector('.showPopupBt');
+        const closePopupBt = document.querySelector('.closePopupBt');
+        const hiddenBt = document.querySelector('.hiddenBt');
+        const showBt = document.querySelector('.showBt');
+        const minipopup = document.querySelector('.minipopup');
+
+        showPopupBt.addEventListener('click', () => {
+            minipopup.style.display = 'block';
+            showBt.style.display = 'none';
+            hiddenBt.style.display= 'block';
+        });
+        closePopupBt.addEventListener('click', () => {
+            minipopup.style.display = 'none';
+            showBt.style.display= 'block';
+            hiddenBt.style.display = 'none';
+        });
+
+
+
+
+
+    </script>
+  </header>
+</th:block>

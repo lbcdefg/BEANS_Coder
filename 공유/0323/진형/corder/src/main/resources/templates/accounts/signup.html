@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="/css/fonts.css" rel="stylesheet">
+    <link href="/css/signup.css" rel="stylesheet">
+	<link href="/css/common-style.css" rel="stylesheet">
+	<script>
+		function doTrim(){
+			var email = document.getElementById("email").value; //이메일
+			var name = document.getElementById("name").value; // 이름
+			var nick = document.getElementById("nick").value; //닉네임
+			var password = document.getElementById("password").value; //비밀번호
+			var password2 = document.getElementById("password2").value; // 확인 비밀번호
+
+			email = email.trim();
+			name = name.trim();
+			nick = nick.trim();
+			password = password.trim();
+			password2 = password2.trim();
+	        signupForm.submit();
+		}
+	</script>
+</head>
+<body>
+	<section>
+		<main>
+			<div class="container">
+			<form name="signupForm" th:action="@{signupOk.do}" method="post" th:object="${memberDto}">
+				<!--<input type="hidden" name="_csrf" value="{{_csrf.token}}"/>-->
+				<div class="top-container">
+					<div class="logo-wrapper bg-color">
+						<a id="logo_a" href="/" >
+							Coder
+						</a>
+					</div>
+					<div class="inner-middle-container">
+						<div class="email-wrapper">
+							<input type="email" id="email"  name="email"  maxlength="64" placeholder="이메일주소" th:value="${memberDto} ? ${memberDto.email}:''" required/>
+							<span id="valid">[[${valid_email}]]</span>
+						</div>
+						<div class="name-wrapper">
+							<input id="name" name="name" type="text"  placeholder="성명" th:value="${memberDto} ? ${memberDto.name}:''"/>
+							<span id="valid">[[${valid_name}]]</span>
+						</div>
+						<div class="nick-wrapper">
+							<input id="nick" name="nick" type="text" maxlength="8" placeholder="별명(2~8자)" th:value="${memberDto} ? ${memberDto.nick}:''"/>
+							<span id="valid">[[${valid_nick}]]</span>
+						</div>
+						<div class="pwd-wrapper">
+								<!--<input id="password1" name="password" type="password"  th:value="${member.password}" maxlength="64" placeholder="이메일주소" required/>-->
+							<input id="password" type="password" name="password"   maxlength="15" placeholder="비밀번호(영문, 숫자, 특수기호 8-15자)"/>
+							<span id="valid">[[${valid_password}]]</span>
+						</div>
+						<div class="pwd-wrapper">
+							<input id="password2" type="password" name="password2" maxlength="15" placeholder="비밀번호(확인)"/>
+							<span id="valid">[[${notEqual}]][[${valid_password2}]] </span>
+						</div>
+						<div class="signupbt-wrapper">
+							<input id="signupbt" type="button" value="가입" onclick="doTrim()"/>
+						</div>
+					</div>
+
+				</div>
+				</form>
+				<div class="bottom-container">
+					<div class="login-wrapper">
+						<span>계정이 있으신가요?</span>&nbsp;<a id="login_a" href="../accounts/login.do" >로그인</a></span>
+					</div>
+				</div>
+			</div>
+
+		</main>
+
+	</section>
+
+</body>
+</html>

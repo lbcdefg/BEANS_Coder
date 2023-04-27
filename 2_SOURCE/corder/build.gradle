@@ -1,0 +1,74 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.9'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+}
+
+group = 'com.springboot'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation 'junit:junit:4.13.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.1'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	//타임리프 레이아웃
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	implementation 'javax.servlet:jstl'
+	//Http Status 415 error
+	//implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.8'
+
+	//Json Object
+	//implementation group: 'org.json', name: 'json', version: '20090211'
+	implementation 'com.google.code.gson:gson:2.8.6'
+
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	implementation 'commons-io:commons-io:2.11.0'
+
+	//jdbc
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+	//oracle
+	implementation 'com.oracle.database.jdbc:ojdbc11'
+
+	//JPA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	//lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	//Security
+	// 스프링 시큐리티를 사용하기 위해 추가
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// 뷰 단에서 현재 로그인된 사용자의 정보를 가져오기 위해 추가
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	//Bcrypt 암호화
+	implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.3m'
+
+	//implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+	implementation 'org.hibernate.validator:hibernate-validator:6.1.2.Final'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	//이메일 인증
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// https://mvnrepository.com/artifact/org.imgscalr/imgscalr-lib
+	implementation 'org.imgscalr:imgscalr-lib:4.2'
+
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="fragment/config :: metaConfig">
+  </th:block>
+  <th:block th:replace="fragment/commonjs :: commonJs">
+  </th:block>
+  <title>Corder - All that Developer</title>
+  <style data-emotion="css" data-s=""></style>
+  <style>
+
+    td {
+      font-size:.8rem
+    }
+
+  </style>
+  <script type="text/javascript" language="javascript"
+          src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <script type="text/javascript" src="/js/map.js"></script>
+  <script type="text/javascript" src="/js/stringBuffer.js"></script>
+
+  <script type="text/javascript">
+	//폼에 데이터를 추가하기 위해 (파일을 전송하기 전 정보 유지)
+	var fd = new FormData();
+	//파일 중복 업로드 방지용 맵을 선언한다.
+	var map = new Map();
+	//submit 버튼을 눌렀을 때
+	function submitFile(){
+		//추가적으로 보낼 파라미터가 있으면 formData에 넣어준다.
+		//예를들어 , 게시판의 경우 게시글 제목 , 게시글 내용 등등
+		fd.append('temp',$('#temp').val());
+		//ajax로 이루어진 파일 전송 함수를 수행시킨다.
+		sendFileToServer();
+	}
+	//파일 전송 함수이다.
+	var sendFileToServer = function() {
+	    var midNum = document.getElementById('mid').value;
+		$.ajax({
+			type : "POST",
+			url : "myinfo/fileUpload.do?mid="+midNum, //Upload URL
+			data : fd,
+			contentType : false,
+			processData : false,
+			cache : false,
+			success : function(data) {
+				if(data) {
+					location.href='/settings';
+				}else {
+					alert('실패');
+				}
+			}
+		});
+
+	}
+	function handleFileUpload(files) {
+		//파일의 길이만큼 반복하며 formData에 셋팅해준다.
+		var megaByte = 1024*1024;
+		for (var i = 0; i < files.length; i++) {
+			if(map.containsValue(files[i].name) == false && (files[i].size/megaByte) <= 20 ){
+				//fd.append(files[i].name, files[i]);
+				fd.append("file", files[i]);
+				//fd.append("file", files[i], files[i].name);
+				//파일 중복 업로드를 방지하기 위한 설정
+				map.put(files[i].name, files[i].name);
+				// 파일 이름과 정보를 추가해준다.
+				var tag = createFile(files[i].name, files[i].size);
+				$('#fileTable').append(tag);
+			}else{
+				//중복되는 정보 확인 위해 콘솔에 찍음
+				if((files[i].size/megaByte) > 20){
+					alert(files[i].name+"은(는) \n 20메가 보다 커서 업로드가 할 수 없습니다.");
+				}else{
+					alert('파일 중복 : ' + files[i].name);
+				}
+			}
+	    }
+	}
+	// 태그 생성
+	function createFile(fileName, fileSize) {
+		var file = {
+				name : fileName,
+				size : fileSize,
+				format : function() {
+					var sizeKB = this.size / 1024;
+					if (parseInt(sizeKB) > 1024) {
+						var sizeMB = sizeKB / 1024;
+						this.size = sizeMB.toFixed(2) + " MB";
+					} else {
+						this.size = sizeKB.toFixed(2) + " KB";
+					}
+					//파일이름이 너무 길면 화면에 표시해주는 이름을 변경해준다.
+					if(name.length > 70){
+						this.name = this.name.substr(0,68)+"...";
+					}
+					return this;
+				},
+
+
+
+				tag : function() {
+					var tag = new StringBuffer();
+					tag.append('<tr>');
+					tag.append("<td id='tabFileName'> 파일명 </td>");
+					tag.append('<td>'+this.name+'</td>');
+					tag.append('</tr>');
+					tag.append('<tr>');
+					tag.append("<td id='tabFileSize'> 사이즈 </td>");
+					tag.append('<td>'+this.size+'</td>');
+					tag.append('</tr>');
+					tag.append("<button type='submit' id='"+this.name+"' onclick='delFile(this)'>업로드</button>");
+					tag.append("<button id='"+this.name+"' onclick='delFile(this)'>취소</button>");
+
+
+					return tag.toString();
+				}
+		}
+
+		return file.format().tag();
+	}
+	//업로드 할 파일을 제거할 때 수행되는 함수
+	function delFile(e) {
+		//선택한 창의 아이디가 파일의 form name이므로 아이디를 받아온다.
+		var formName = e.id;
+
+		//form에서 데이터를 삭제한다.
+		fd.delete(formName);
+
+		//맵에서도 올린 파일의 정보를 삭제한다.
+		map.remove(formName);
+		// tr을 삭제하기 위해
+		$(e).parents('tr').remove();
+		alert('삭제 완료!');
+	}
+	$(document).ready(function() {
+		var objDragDrop = $(".dragDropDiv");
+		// div 영역으로 드래그 이벤트호출
+		$(".dragDropDiv").on("dragover",
+			function(e) {
+				e.stopPropagation();
+				e.preventDefault();
+				$(this).css('border', '.5px solid blue');
+		});
+		// 해당 파일 드랍시 호출 이벤트
+		$(".dragDropDiv").on("drop", function(e) {
+			$(this).css('border', '.5px solid skyblue');
+			//브라우저로 이동되는 이벤트를 방지하고 드랍 이벤트를 우선시 한다.
+			e.preventDefault();
+			//DROP 되는 위치에 들어온 파일 정보를 배열 형태로 받아온다.
+			var files = e.originalEvent.dataTransfer.files;
+
+			//DIV에 DROP 이벤트가 발생 했을 때 다음을 호출한다.
+			handleFileUpload(files);
+
+			//sendFileToServer(); //테스팅 20200108
+			submitFile(); //테스팅 20200108
+		});
+		// div 영역빼고 나머지 영역에 드래그 원래색변경
+		$(document).on('dragover', function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			objDragDrop.css('border', '1px solid blue');
+		});
+	});
+
+    $(document).ready(function(){
+         const nameValOld = document.getElementById('name').value;
+         const nickValOld = document.getElementById('nick').value;
+         $("#name").on("keyup", function(){
+            var nameValNew = document.getElementById('name').value;
+            const target = document.getElementById('saveBt');
+            if (nameValOld != nameValNew) {
+                target.disabled = false;
+            } else {
+                target.disabled = true;
+            }
+        });
+        $("#nick").on("keyup", function(){
+            var nickValNew = document.getElementById('nick').value;
+            const target = document.getElementById('saveBt');
+            if (nickValOld != nickValNew) {
+                target.disabled = false;
+            } else {
+                target.disabled = true;
+            }
+        });
+    });
+  </script>
+</head>
+
+<body class="closePopup flex h-full select-auto flex-col font-sans text-gray-900 antialiased dark:bg-gray-800 dark:text-gray-100">
+  <th:block th:replace="fragment/header :: commonHeader">
+  </th:block>
+  <main class="mx-auto w-full max-w-7xl">
+    <div class="mt-6 px-4 lg:mt-10 lg:px-0">
+      <div class="divide-y divide-gray-500/30 dark:divide-gray-500/70 lg:grid lg:grid-cols-12 lg:divide-x lg:divide-y-0">
+        <aside class="lg:col-span-3 lg:pr-16">
+          <h2 class="text-xl font-semibold leading-6">내 계정</h2>
+          <nav class="my-4 space-y-2 lg:my-10">
+            <a class="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 group flex items-center rounded-md px-3 py-2 font-medium hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-300" aria-current="page" href="/settings/profile">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="text-gray-600 dark:text-gray-400 -ml-1 mr-3 h-6 w-6 shrink-0 group-hover:text-gray-800 dark:group-hover:text-gray-200"><path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <span class="truncate">회원정보</span></a>
+            <a class="text-gray-500 group flex items-center rounded-md px-3 py-2 font-medium hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-300" href="/settings/account"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class=" text-gray-400 dark:text-gray-600 -ml-1 mr-3 h-6 w-6 shrink-0 group-hover:text-gray-800 dark:group-hover:text-gray-200"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12a7.5 7.5 0 0015 0m-15 0a7.5 7.5 0 1115 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077l1.41-.513m14.095-5.13l1.41-.513M5.106 17.785l1.15-.964m11.49-9.642l1.149-.964M7.501 19.795l.75-1.3m7.5-12.99l.75-1.3m-6.063 16.658l.26-1.477m2.605-14.772l.26-1.477m0 17.726l-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205L12 12m6.894 5.785l-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864l-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495"></path></svg><span class="truncate">계정</span>
+            </a>
+          </nav>
+        </aside>
+        <form class="divide-y divide-gray-500/30 dark:divide-gray-500/70 lg:col-span-9">
+          <div class="my-10 lg:my-0 lg:pl-20">
+            <h2 class="text-xl font-semibold leading-6">회원정보</h2>
+
+            <div class="my-10 flex flex-col lg:flex-row">
+              <div class="flex-grow space-y-6">
+                <div>
+                  <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">이름</label>
+                  <div class="mt-1 flex">
+                    <input th:value="${loginOk.name}" type="text" id="name" name="name" autocomplete="name" placeholder="이름을 입력해주세요." class="block w-full appearance-none rounded-md border border-gray-500/30 px-3 py-2 text-sm placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20 sm:text-base"/>
+                  </div>
+                </div>
+                <div>
+                  <label for="nick" class="block text-sm font-medium text-gray-700 dark:text-gray-300">닉네임</label>
+                  <div class="mt-1 flex">
+                    <input th:value="${loginOk.nick}" type="text" id="nick" name="nick" autocomplete="nick" class="block w-full appearance-none rounded-md border border-gray-500/30 px-3 py-2 text-sm placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20 sm:text-base" >
+                  </div>
+                </div>
+                <div>
+                  <label for="nick" class="block text-sm font-medium text-gray-700 dark:text-gray-300">관심있는 기술 태그 입력</label>
+                  <p class="mt-1 text-sm text-gray-500">사용 중인 기술이나 관심있는 기술 태그를 선택해주세요.</p>
+                  <div class="mt-1 rounded-md">
+                    <div class=" css-b62m3t-container">
+                      <span id="react-select-3-live-region" class="css-7pg0cj-a11yText"></span>
+                      <span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-7pg0cj-a11yText"></span>
+                      <div class=" css-1bgg19h-control">
+                        <div class=" css-1d8n9bt">
+                          <div class=" css-17alght-placeholder" id="react-select-3-placeholder">스킬 태그를 선택해주세요.</div>
+                          <div class=" css-91vuuu" data-value>
+                            <input class="" autocapitalize="none" autocomplete="off" autocorrect="off" id="react-select-3-input" spellcheck="false" tabindex="0" type="text" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" aria-describedby="react-select-3-placeholder" value="" style="color: inherit; background: 0px center; opacity: 1; width: 100%; grid-area: 1 / 2 / auto / auto; font: inherit; min-width: 2px; border: 0px; margin: 0px; outline: 0px; padding: 0px;">
+                          </div>
+                        </div>
+                        <div class=" css-1wy0on6">
+                          <span class=" css-1okebmr-indicatorSeparator"></span>
+                          <div class=" css-s3mjv1-indicatorContainer" aria-hidden="true">
+                            <svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-8mmkcg">
+                              <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6 flex-grow lg:ml-52 lg:mt-0 lg:shrink-0 lg:grow-0">
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300 sm:hidden" aria-hidden="true">프로필 사진</p>
+                <div class="relative" data-headlessui-state="">
+                  <div class="mt-1 lg:hidden">
+                    <div class="flex items-center">
+                      <div class="inline-block h-12 w-12 flex-shrink-0 overflow-hidden rounded-full" aria-hidden="true">
+                        <th:block th:if="${userImage}">
+                          <th:block th:with="extension=${#strings.substring(userImage.fname, #strings.indexOf(userImage.fname, '.'), userImage.fname.length)}">
+                            <th:block th:if="${#strings.contains('.jpg|.png|.jpeg|.ico|.gif', extension)}">
+                              <div class="items">
+                                <img class="h-full w-full rounded-full border-2 border-gray-200" th:src="|/myinfo/images/${userImage.fname}|" width="150" height="150" alt="프로필 사진">
+                              </div>
+                            </th:block>
+                          </th:block>
+                        </th:block>
+                        <th:block th:if="${nothing}">
+                          <img class="h-full w-full rounded-full border-2 border-gray-200" src="//www.gravatar.com/avatar/31912249a6ca1075c84bedba97699546?d=identicon&amp;s=96" width="150" height="150" alt="프로필 사진">
+                        </th:block>
+                      </div>
+                      <div class="ml-5 rounded-md shadow-sm">
+                        <div class="group relative flex items-center justify-center rounded-md border border-gray-300 px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:bg-gray-50">
+                          <button id="headlessui-popover-button-:r2n:" type="button" aria-expanded="false" data-headlessui-state="">
+                            <label for="mobile-user-photo" class="pointer-events-none relative text-sm font-medium leading-4 text-gray-700 dark:text-gray-300"><span>변경</span><span class="sr-only">프로필 사진</span></label>
+                            <input id="mobile-user-photo" name="user-photo" type="file" class="absolute h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0">
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="relative my-1 hidden overflow-hidden rounded-full lg:block">
+                    <th:block th:if="${userImage}">
+                      <th:block th:with="extension=${#strings.substring(userImage.fname, #strings.indexOf(userImage.fname, '.'), userImage.fname.length)}">
+                        <th:block th:if="${#strings.contains('.jpg|.png|.jpeg|.ico|.gif', extension)}">
+                          <div class="items">
+                            <img class="h-40 w-40 rounded-full border-2 border-gray-200" th:src="|/myinfo/images/${userImage.fname}|"  alt="프로필 사진">
+                          </div>
+                        </th:block>
+                      </th:block>
+                    </th:block>
+                    <th:block th:if="${nothing}">
+                      <img class="h-40 w-40 rounded-full border-2 border-gray-200" src="//www.gravatar.com/avatar/31912249a6ca1075c84bedba97699546?d=identicon&amp;s=96" alt="프로필 사진">
+                    </th:block>
+                    <button class="showFileUpPopup absolute inset-0" id="headlessui-popover-button-:r2n:" type="button" aria-expanded="false" data-headlessui-state="">
+                      <label for="desktop-user-photo" class="flex h-full w-full items-center justify-center bg-gray-900 bg-opacity-75 text-sm font-medium text-gray-100 opacity-0 focus-within:opacity-100 hover:opacity-100">
+                        <span>변경</span><span class="sr-only">프로필 사진</span>
+                        <input id="desktop-user-photo" name="user-photo" class="absolute inset-0 h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0">
+                      </label>
+                    </button>
+                    <button id="headlessui-focus-sentinel-:ro:" type="button" aria-hidden="true" style="position: fixed; top: 1px; left: 1px; width: 1px; height: 0px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px;">
+                    </button>
+                  </div>
+                  <button id="headlessui-focus-sentinel-before-:r1r:" type="button" aria-hidden="true" style="position: fixed; top: 1px; left: 1px; width: 1px; height: 0px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border-width: 0px;">
+                  </button>
+                  <!--<div class="fileUpPopup absolute inset-x-0 top-0 z-10 w-full origin-top transform transition opacity-100 scale-100" id="headlessui-popover-panel-:rm:" tabindex="-1" data-headlessui-state="open" style="width:300px; margin-right:30%">-->
+                  <div class="fileUpPopup absolute inset-x-60 top-0 z-10 w-full origin-top transform transition opacity-100 scale-100" id="headlessui-popover-panel-:rm:" tabindex="-1" data-headlessui-state="open" style="width:200px;">
+                    <div class="overflow-hidden rounded-lg bg-white py-1 shadow-lg ring-1 ring-gray-900 ring-opacity-5 dark:bg-black">
+                      <div class="flex flex-col -space-y-2">
+                        <!--<button type="button" class="group flex-1 cursor-pointer px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-900" tabindex="0">-->
+                        <div class="flex items-center space-x-1" style="text-align:center;  margin:auto;">
+                          <label class="flex items-center space-x-1">
+                            <span class="flex-1 w-full text-sm" style="font-size:.8rem;">
+                              <strong>이미지를 드롭해보세요</strong><br/>
+                              <input class="closeFileUp bg-white text-sm" type="button" style="color:rgb(25,25,25); font-size:.7rem;" value="(닫으려면 클릭하세요)">
+                            </span>
+                          </label>
+                        </div>
+                        <!--</button>-->
+                        <!--drag N drop -->
+                        <div id="fileUpload" class="dragDropDiv" style="height:150px;">
+                          <table id='fileTable'>
+                          </table>
+                          <input type="hidden" name="mid" id="mid" th:value="${loginOk.mid}">
+                        </div>
+                        <div class="group relative flex-1 cursor-pointer px-3 py-2">
+                          <div class="mt-1 flex items-center space-x-1">
+                            <label for="desktop-user-photo" class="relative flex h-full w-full items-center justify-center rounded-md bg-blue-500 py-2 text-white shadow-sm hover:bg-blue-600">
+                              <p class="flex flex-col text-center">
+                                <span class="text-sm font-semibold">이미지 업로드</span>
+                                <span class="text-xs">권장 사이즈 150px<br>최대 250KB</span>
+                              </p>
+                              <input type="file" accept="image/bmp, image/jpg, image/jpeg, image/png, image/webp" id="desktop-user-photo" name="user-photo" class="hidden">
+                              <button type="button" class="fileUploadBtn absolute inset-0 h-full w-full cursor-pointer border-gray-300 opacity-80">
+                              </button>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="divide-y divide-gray-500/30 dark:divide-gray-500/70">
+            <div class="my-10 lg:my-10 lg:pl-20">
+              <div>
+                <h2 class="text-lg font-medium leading-6">이메일 수신동의</h2>
+                <p class="mt-1 text-sm text-gray-500"><span style="color:blue;">Coder</span>에서 주최하는 다양한 이벤트, 정보성 뉴스레터 및 광고 수신여부를 설정할 수 있습니다.</p>
+              </div>
+              <ul class="mt-2 divide-y divide-gray-500/30 dark:divide-gray-500/70">
+                <li class="flex items-center justify-between py-4">
+                  <div class="flex flex-col">
+                    <p class="text-sm font-medium" id="headlessui-label-:r2r:">뉴스레터 및 마케팅 메일 수신</p>
+                    <p class="text-sm text-gray-500" id="headlessui-description-:r2s:">유저가 만드는 다양한 컨텐츠를 뉴스레터로 받습니다.</p>
+                  </div>
+                  <button class="bg-gray-200 dark:bg-gray-700 relative ml-4 inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none" id="headlessui-switch-:r2t:" role="switch" type="button" tabindex="0" aria-checked="false" data-headlessui-state="" aria-labelledby="headlessui-label-:r2r:" aria-describedby="headlessui-description-:r2s:"><span aria-hidden="true" class="translate-x-0 inline-block h-5 w-5 transform rounded-full bg-white/90 shadow ring-0 transition duration-200 ease-in-out"></span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div class="my-10 flex justify-end py-5 lg:my-10 lg:pl-20">
+              <button id="saveBt" type="button" class="inline-flex items-center space-x-2 rounded-md bg-blue-500 px-8 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-600 disabled:bg-blue-500 disabled:opacity-40" disabled="">저장</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+        const fileUpPopupBt = document.querySelector('.showFileUpPopup');
+        const fileUpPopup = document.querySelector('.fileUpPopup');
+        const closeFileUpBt = document.querySelector('.closeFileUp');
+        const dragDropDiv = document.querySelector('.dragDropDiv');
+
+        fileUpPopupBt.addEventListener('click', () => {
+            fileUpPopup.style.display = 'block';
+
+        });
+        closeFileUpBt.addEventListener('click', () => {
+            fileUpPopup.style.display = 'none';
+
+        });
+        dragDropDiv.addEventListener('click', () => {
+            fileUpPopup.style.display = 'none';
+
+        });
+
+
+    </script>
+  </main>
+  <th:block th:replace="fragment/footer :: commonFooter">
+  </th:block>
+</body>
+</html>

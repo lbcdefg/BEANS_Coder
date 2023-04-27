@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="fragment/config :: metaConfig">
+  </th:block>
+  <th:block th:replace="fragment/commonjs :: commonJs">
+  </th:block>
+  <title>계정 찾기</title>
+  <style>
+
+    #forgotLoginBtDiv {
+        display:none;
+    }
+    #forgotLoginBt{
+        color:white;
+        font-size:1.5rem;
+        font-weight:bold;
+        width:150px;
+        height:35px;
+        line-height:35px;
+        border-radius:30px;
+        background-color:green;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <script type="text/javascript">
+      $(function(){
+          $("#email").on("keyup", function(){
+              $.ajax({
+                  type : "GET",
+                  url : "../forgot/matchEmail",
+                  data: {email: $("#email").val()},
+                  success : function(result){
+                      console.log("result" + result);
+                      if(result == true){
+                          emconfirmchk = true;
+                          var html = "";
+                          html += "<span id='emconfirmchk'>";
+                          html += "존재하지 않는 이메일입니다.";
+                          html += "</span>"
+                          $('#checkEmailResult').html(html);
+                          $("#emconfirmchk").css({
+                              "color" : "#FA3E3E",
+                              "font-weight" : "bold",
+                              "font-size" : "10px"
+                          });
+                          const target = document.getElementById("findBt");
+                          target.disabled=true;
+                          target.style.setProperty("border",".5px solid gray");
+
+                      } else if (result == false) {
+                          emconfirmchk = false;
+                          var html = "";
+                          html += "<span id='emconfirmchk'>";
+                          html += "이메일이 확인되었습니다.";
+                          html += "</span>"
+                          $('#checkEmailResult').html(html);
+                          $("#emconfirmchk").css({
+                              "color" : "#0D6EFD",
+                              "font-weight" : "bold",
+                              "font-size" : "10px"
+                          });
+                          const target = document.getElementById("findBt");
+                          target.disabled=false;
+                          target.style.setProperty("border","1.2px solid navy");
+                      }
+                  }
+              });
+          });
+          $("#findBt").on("click", function(){
+              $.ajax({
+                  type : "GET",
+                  url : "../forgot/resetPwd",
+                  data: {email: $("#email").val()},
+                  success : function(data){
+                      console.log("data: " + data);
+                      var html = "";
+                      html += "<strong style='font-size:25px; color:navy;'>";
+                      html += $("#email").val();
+                      html += "</strong>";
+                      html += "<p>으로 안내 메일을 발송하였습니다.</p>";
+                      html += "<br/><br/>";
+                      html += "<div>";
+                      html += "<p style='font-size:14px;'>";
+                      html += "해당 이메일을 확인 하시고, 비밀번호 변경이 필요하신 경우 해당 이메일을 통해 변경 가능합니다.";
+                      html += "</p>";
+                      html += "<p style='font-size:14px;'>";
+                      html += "* 서비스에 따라 스팸으로 분류되어 있을 수 있습니다. 스팸함도 꼭 확인해 주시기 바랍니다.";
+                      html += "</p>";
+                      html += "</div>";
+                      $(".container").html(html);
+                      const forgotLoginBtDiv = document.getElementById("forgotLoginBtDiv");
+                      forgotLoginBtDiv.style.display = 'flex';
+                  }
+              });
+          });
+      });
+  </script>
+
+
+</head>
+<body class="flex h-full select-auto flex-col font-sans text-gray-900 antialiased dark:bg-gray-800 dark:text-gray-100">
+  <div id="__next">
+
+
+    <div class="mt-20 flex justify-center px-6 pb-16 sm:mt-32 sm:px-0">
+      <div class="w-full max-w-md justify-center">
+        <div class="logo-wrapper bg-color" style="text-align:center; font-size:3rem; font-weight:bold; width:50%; height:60px; line-height:60px; border-radius:30px; margin:auto;">
+          <a id="logo_a" href="/" >
+            Coder
+          </a>
+        </div>
+        <h2 class="mt-6 text-center text-2xl font-bold sm:text-3xl">계정찾기
+        </h2>
+        <div class="mx-4 sm:mx-0 container" style="margin-top:50px; margin-bottom:50px;">
+          <span class="mt-2 flex justify-center text-center text-sm text-gray-600 dark:text-gray-400">회원 가입시 입력하신 이메일 주소를 입력하시면, <br>해당 이메일로 아이디 및 비밀번호 변경 링크를 보내드립니다.
+          </span>
+          <form class="mt-8 space-y-6">
+            <div>
+              <label for="email" class="text-sm font-medium text-gray-700 dark:text-gray-300">이메일 주소
+              </label>
+              <div class="mt-1">
+                <input id="email" type="email" autocomplete="email" required="" placeholder="이메일을 입력해주세요" class="block w-full appearance-none rounded-md border border-gray-500/30 px-3 py-2 text-sm placeholder-gray-500/80 shadow-sm focus:border-gray-500 focus:outline-none focus:ring-0 dark:bg-gray-500/20 sm:text-base" name="email">
+              </div>
+              <div id="checkEmailResult">
+                <span></span>
+              </div>
+            </div>
+            <div class="flex space-x-4">
+              <button type="button" class="inline-flex w-full justify-center rounded-md border border-gray-500/30 bg-white px-4 py-2 text-sm font-medium shadow-sm hover:border-gray-100 focus:outline-none dark:border-gray-500/70 dark:bg-gray-700 dark:hover:bg-gray-600" onclick="history.back()">취소</button>
+              <button id="findBt" type="button" class="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-400 focus:outline-none" disabled>계정찾기
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="justify-center" id="forgotLoginBtDiv">
+          <button id="forgotLoginBt" onclick="location.href='/accounts/login.do'">
+            로그인
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

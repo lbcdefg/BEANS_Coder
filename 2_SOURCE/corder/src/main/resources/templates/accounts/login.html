@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/css/fonts.css" rel="stylesheet">
+  <link href="/css/login.css" rel="stylesheet">
+  <link href="/css/common-style.css" rel="stylesheet">
+</head>
+<body>
+<section>
+  <main>
+    <div class="container">
+      <form name="f" th:action="@{/accounts/login.do}" method="POST">
+        <div class="top-container">
+          <div class="logo-wrapper bg-color">
+            <a id="logo_a" href="/" >
+            Coder
+            </a>
+          </div>
+          <div class="inner-middle1-container">
+            <div class="email-wrapper">
+              <input name="username" id="email_input" type="text" maxlength="64"placeholder="이메일주소" />
+            </div>
+            <div class="pwd-wrapper">
+              <input name="password" id="pwd_input" type="password" maxlength="12" placeholder="비밀번호"/>
+            </div>
+          </div>
+          <div class="inner-middle1-container">
+            <div class="loginbt-wrapper">
+              <input id="loginbt" type="submit" value="로그인"/>
+            </div>
+          </div>
+          <div th:if="${param.error}">
+            <div class="alert alert-danger">
+              사용자ID 또는 비밀번호를 확인해 주세요.
+            </div>
+          </div>
+          <div class="inner-middle2-container">
+            <hr>
+          </div>
+
+          <div class="inner-middle3-container">
+            <div class="findpwd-wrapper">
+              <a id="findpwd" href="/forgot">계정 찾기</a>
+            </div>
+
+          </div>
+        </div>
+      </form>
+      <div class="bottom-container">
+        <div class="signup-wrapper">
+          <span>계정이 없으신가요?</span>&nbsp;<a id="signup_a" href="../accounts/signup.do">가입하기</a></span>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+</body>
+</html>

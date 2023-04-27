@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="/css/fonts.css" rel="stylesheet">
+    <link href="/css/signup.css" rel="stylesheet">
+	<link href="/css/common-style.css" rel="stylesheet">
+	<script type="text/javascript" language="javascript"
+			src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	<script type="text/javascript">
+
+		function doCheck(){
+			var email = document.getElementById("email").value; //이메일
+			var name = document.getElementById("name").value; // 이름
+			var nick = document.getElementById("nick").value; //닉네임
+			var password = document.getElementById("password").value; //비밀번호
+			var password2 = document.getElementById("password2").value; // 확인 비밀번호
+
+			email = email.trim();
+			name = name.trim();
+			nick = nick.trim();
+			password = password.trim();
+			password2 = password2.trim();
+
+			signupForm.submit();
+		}
+
+		$(function(){
+			$("#checkEmailBt").on("click", function(){
+				const emailVal = $("#email").val();
+				if(!emailVal || emailVal.trim() == 0) {
+					emconfirmchk = true;
+					var html = "";
+					html += "<span id='emconfirmchk'>";
+					html += "이메일을 입력해주세요";
+					html += "</span>"
+					$('#checkEmailResult').html(html);
+					$("#emconfirmchk").css({
+						"color" : "#FA3E3E",
+						"font-weight" : "bold",
+						"font-size" : "10px"
+					});
+				} else {
+					$.ajax({
+						type : "GET",
+						url : "checkEmail",
+						data: {email: $("#email").val()},
+						success : function(result){
+							console.log("result :" + result);
+							if (result == true) {
+								const target = document.getElementById('verifyingCodeBt');
+								target.disabled = false;
+								target.style.setProperty("border",".5px solid navy");
+								emconfirmchk = false;
+								var html = "";
+								html += "<span id='emconfirmchk'>";
+								html += "가입 가능한 이메일입니다.";
+								html += "</span>"
+
+								$('#checkEmailResult').html(html);
+								$("#emconfirmchk").css({
+									"color" : "#0D6EFD",
+									"font-weight" : "bold",
+									"font-size" : "10px"
+								});
+							} else if (result == false) {
+								emconfirmchk = true;
+								var html = "";
+								html += "<span id='emconfirmchk'>";
+								html += "동일한 이메일이 존재합니다.";
+								html += "</span>"
+								$('#checkEmailResult').html(html);
+								$("#emconfirmchk").css({
+									"color" : "#FA3E3E",
+									"font-weight" : "bold",
+									"font-size" : "10px"
+								});
+							}
+						}
+					});
+				}
+			});
+			$("#verifyingCodeBt").on("click", function(){
+				$.ajax({
+					type : "POST",
+					url : "mailConfirm",
+					data: {email: $("#email").val()},
+					success : function(data){
+						alert("해당 이메일로 인증번호 발송이 완료되었습니다. \n 확인부탁드립니다.")
+						console.log("data : "+data);
+						chkEmailConfirm(data);
+					}
+				});
+			});
+			// 이메일 인증번호 체크 함수
+			function chkEmailConfirm(data){
+				$("#verifyingCode").on("keyup", function(){
+					if (data != $('#verifyingCode').val()) { //
+						codeconfirmchk = false;
+						$('#checkCodeResult').html("<span id='codeconfirmchk'>인증번호가 잘못되었습니다</span>");
+						$("#codeconfirmchk").css({
+							"color" : "#FA3E3E",
+							"font-weight" : "bold",
+							"font-size" : "10px"
+						});
+						const target = document.getElementById('signupbt');
+						target.disabled = true;
+						target.style.setProperty("background-color","rgba(204, 204, 204, .8)");
+						target.style.setProperty("border","none");
+						//console.log("중복아이디");
+					} else { // 아니면 중복아님
+						codeconfirmchk = true;
+						$('#checkCodeResult').html("<span id='codeconfirmchk'>인증번호 확인 완료</span>");
+						$("#codeconfirmchk").css({
+							"color" : "#0D6EFD",
+							"font-weight" : "bold",
+							"font-size" : "10px"
+						});
+						const target = document.getElementById('signupbt');
+						target.disabled = false;
+						target.style.setProperty("background-color","rgb(105,255,51)");
+						target.style.setProperty("border",".1px solid navy");
+					}
+				});
+			}
+			$("#nick").on("keyup", function(){
+				var nick = $("#nick").val();
+				nick = nick.trim();
+				if(nick.length > 1) {
+					$.ajax({
+						type : "GET",
+						url : "checkNick",
+						data: {nick: $("#nick").val()},
+						success : function(result){
+							console.log("result :" + result);
+							if (result == true) {
+								nickConfirmChk = false;
+								var html = "";
+								html += "<span id='nickConfirmChk'>";
+								html += "가입 가능한 닉네임입니다.";
+								html += "</span>"
+								$('#checkNickResult').html(html);
+								$("#nickConfirmChk").css({
+									"color" : "#0D6EFD",
+									"font-weight" : "bold",
+									"font-size" : "10px"
+								});
+							} else if (result == false) {
+								nickConfirmChk = true;
+								var html = "";
+								html += "<span id='nickConfirmChk'>";
+								html += "동일한 닉네임이 존재합니다.";
+								html += "</span>"
+								$('#checkNickResult').html(html);
+								$("#nickConfirmChk").css({
+									"color" : "#FA3E3E",
+									"font-weight" : "bold",
+									"font-size" : "10px"
+								});
+							}
+						}
+					});
+				} else if (nick.length <= 1) {
+					nickConfirmChk = true;
+					var html = "";
+					html += "<span id='nickConfirmChk'>";
+					html += "닉네임은 두 글자부터 가능합니다.";
+					html += "</span>"
+					$('#checkNickResult').html(html);
+					$("#nickConfirmChk").css({
+						"color" : "#FA3E3E",
+						"font-weight" : "bold",
+						"font-size" : "10px"
+					});
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<section>
+		<main>
+			<div class="container">
+			<form name="signupForm" th:action="@{signupOk.do}" method="post" th:object="${memberDto}">
+				<!--<input type="hidden" name="_csrf" value="{{_csrf.token}}"/>-->
+				<div class="top-container">
+					<div class="logo-wrapper bg-color">
+						<a id="logo_a" href="/" >
+							Coder
+						</a>
+					</div>
+					<div class="inner-middle-container">
+						<div style="text-align:center; margin:10px;">
+							<p style="font-size:.7rem;color:gray;">
+								중복확인 완료 후 인증코드 버튼을 입력하세요.
+								<br/>정확한 인증코드 입력시 가입버튼이 활성화됩니다.
+							</p>
+						</div>
+						<div class="email-wrapper" id="email-wrapper">
+							<div class="email">
+
+								<input type="email" id="email"  name="email"  maxlength="64" placeholder="이메일주소" th:value="${memberDto} ? ${memberDto.email}:''" required/>
+							</div>
+							<div class="checkEmailBt">
+								<button type="button" id="checkEmailBt">중복확인</button>
+							</div>
+						</div>
+						<div id="checkEmailResult" style="width: 95%; margin-left:3%;">
+							<span id="valid">[[${valid_email}]]</span>
+						</div>
+						<div class="verifying-wrapper">
+							<div class="verifyingCode">
+								<input type="text" id="verifyingCode" placeholder="인증코드를 입력해주세요">
+							</div>
+							<div class="verifyingCodeBt">
+								<button type="button" id="verifyingCodeBt" disabled="disabled">인증코드</button>
+							</div>
+						</div>
+						<div id="checkCodeResult" style="width: 95%; margin-left:3%;">
+							<span id="valid"></span>
+						</div>
+						<div class="name-wrapper">
+							<input id="name" name="name" type="text"  placeholder="성명" th:value="${memberDto} ? ${memberDto.name}:''"/>
+						</div>
+						<div style="width: 95%; margin-left:3%;">
+							<span id="valid">[[${valid_name}]]</span>
+						</div>
+						<div class="nick-wrapper">
+							<input id="nick" name="nick" type="text" maxlength="8" placeholder="별명(2~8자)" th:value="${memberDto} ? ${memberDto.nick}:''"/>
+						</div>
+						<div id="checkNickResult" style="width: 95%; margin-left:3%;">
+							<span id="valid">[[${valid_nick}]]</span>
+						</div>
+						<div class="pwd-wrapper">
+								<!--<input id="password1" name="password" type="password"  th:value="${member.password}" maxlength="64" placeholder="이메일주소" required/>-->
+							<input id="password" type="password" name="password"   maxlength="15" placeholder="비밀번호(영문, 숫자, 특수기호 8-15자)"/>
+						</div>
+						<div style="width: 95%; margin-left:3%;">
+							<span id="valid">[[${valid_password}]]</span>
+						</div>
+						<div class="pwd-wrapper">
+							<input id="password2" type="password" name="password2" maxlength="15" placeholder="비밀번호(확인)"/>
+						</div>
+						<div style="width: 95%; margin-left:3%;">
+							<span id="valid">[[${notEqual}]][[${valid_password2}]] </span>
+						</div>
+						<div class="signupbt-wrapper">
+							<input id="signupbt" type="button" value="가입" onclick="doCheck()" disabled="disabled"/>
+						</div>
+					</div>
+				</div>
+				</form>
+				<div class="bottom-container">
+					<div class="login-wrapper">
+						<span>계정이 있으신가요?</span>&nbsp;<a id="login_a" href="../accounts/login.do" >로그인</a></span>
+					</div>
+				</div>
+			</div>
+
+		</main>
+
+	</section>
+
+</body>
+</html>
